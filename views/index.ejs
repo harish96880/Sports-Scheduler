@@ -6,10 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="<%= csrfToken %>" />
 
+    <!--Bootstrap-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+      crossorigin="anonymous"
+    ></script>
+
     <!--CSS File-->
     <link href="./css/styles.css" rel="stylesheet" />
 
-    <script>
+    <!-- <script>
       var token = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -47,26 +60,16 @@
           })
           .catch((err) => console.error(err));
       }
-    </script>
+    </script> -->
 
-    <!--Tailwind css-->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind css
+    <script src="https://cdn.tailwindcss.com"></script> -->
 
     <title><%= title %></title>
   </head>
   <body>
-    <div class="grid grid-cols-6">
-      <div class="col-start-3 col-span-2">
-        <%- include("header.ejs") %>
-        <p class="py-2">Welcome to the TO-DO Manager</p>
-        <p class="py-2">
-          New here? <a href="/signup" class="text-green-600">Sign-Up now</a>
-        </p>
-        <p class="py-2">
-          Already have an account?
-          <a href="/login" class="text-green-600">Sign-in</a>
-        </p>
-      </div>
-    </div>
+    <h1>Sports Scheduler</h1>
+    <a href="/login">Sign-in</a><br />
+    <a href="/signup">Sign Up</a>
   </body>
 </html>

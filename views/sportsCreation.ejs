@@ -21,17 +21,14 @@
     <!--CSS File-->
     <link href="./css/styles.css" rel="stylesheet" />
 
-    <title><%= title %></title>
+    <title>Sports Creation</title>
   </head>
   <body>
-    <h6>Login to Your Account</h6>
     <form action="/session" method="post">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <label for="email">Email:</label>
-      <input type="email" name="email" /><br />
-      <label for="password">Password</label>
-      <input type="password" name="password" /><br />
-      <button type="submit">Sign in</button>
+      <label for="newSport">Create Sport</label>
+      <input type="text" name="newSport" /><br />
+      <button type="submit">Create</button>
     </form>
   </body>
 </html>

@@ -85,7 +85,7 @@ app.set("view engine", "ejs");
 
 app.get("/", async (request, response) => {
   response.render("index", {
-    title: "Harish Todo-Manager",
+    title: "Sports-Scheduler",
     "csrfToken": request.csrfToken(), //prettier-ignore
   });
 });
@@ -137,18 +137,6 @@ app.get("/signout", (request, response) => {
     response.redirect("/");
   });
 });
-
-app.post(
-  "/session",
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureFlash: true,
-  }),
-  (request, response) => {
-    console.log(request.user);
-    response.redirect("/todos");
-  }
-);
 
 app.post("/users", async (request, response) => {
   const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
@@ -265,19 +253,49 @@ app.delete(
     } catch (error) {
       return response.status(422).json(error);
     }
-    // FILL IN YOUR CODE HERE
+  }
+);
 
-    // First, we have to query our database to delete a Todo by ID.
-    // Then, we have to respond back with true/false based on whether the Todo was deleted or not.
-    // response.send(true)
-    const todo = await Todo.findByPk(request.params.id);
-    try {
-      const deleteTodo = await todo.deleteTodo({ todo: request.params.id });
-      return response.send(true);
-    } catch (error) {
-      console.log(error);
-      return response.send(false);
+//***************************************Sports Scheduler*********************************************
+
+app.post(
+  "/session",
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
+  (request, response) => {
+    console.log(request.user);
+    if (
+      request.body.email === "adminhari@gmail.com" &&
+      request.body.password === "admin9843"
+    ) {
+      return response.redirect("/admin");
     }
+    response.redirect("/todos");
+  }
+);
+
+app.get(
+  "/admin",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const loggedInUser = request.user.id;
+    if (request.accepts("html")) {
+      response.render("adminHomePage", {
+        "csrfToken": request.csrfToken(), //prettier-ignore
+      });
+    }
+  }
+);
+
+app.get(
+  "/sportsCreation",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    return response.render("sportsCreation", {
+      "csrfToken": request.csrfToken(), //prettier-ignore
+    });
   }
 );
 

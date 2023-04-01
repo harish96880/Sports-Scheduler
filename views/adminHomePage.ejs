@@ -21,17 +21,15 @@
     <!--CSS File-->
     <link href="./css/styles.css" rel="stylesheet" />
 
-    <title><%= title %></title>
+    <title>Admin</title>
   </head>
   <body>
-    <h6>Login to Your Account</h6>
-    <form action="/session" method="post">
+    <form action="/admin" method="post">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <label for="email">Email:</label>
-      <input type="email" name="email" /><br />
-      <label for="password">Password</label>
-      <input type="password" name="password" /><br />
-      <button type="submit">Sign in</button>
     </form>
+    <h1>Welcome Harish</h1>
+    <h4>Administrative Actions</h4>
+    <a href="/sportsCreation">Create a New Sport</a>
+    <a href="#">View Reports</a>
   </body>
 </html>
