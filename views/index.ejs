@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+
+    <!--CSS File-->
+    <link href="./css/styles.css" rel="stylesheet" />
+
+    <script>
+      var token = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+      function updateTodo(id) {
+        const boolean = document.querySelector(`#todo-checkbox-${id}`).checked;
+        console.log(boolean);
+        fetch(`/todos/${id}`, {
+          method: "put",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            completed: boolean,
+            _csrf: token,
+          }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+
+      function deleteTodo(id) {
+        fetch(`/todos/${id}`, {
+          method: "delete",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            _csrf: token,
+          }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+    </script>
+
+    <!--Tailwind css-->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title><%= title %></title>
+  </head>
+  <body>
+    <div class="grid grid-cols-6">
+      <div class="col-start-3 col-span-2">
+        <%- include("header.ejs") %>
+        <p class="py-2">Welcome to the TO-DO Manager</p>
+        <p class="py-2">
+          New here? <a href="/signup" class="text-green-600">Sign-Up now</a>
+        </p>
+        <p class="py-2">
+          Already have an account?
+          <a href="/login" class="text-green-600">Sign-in</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
