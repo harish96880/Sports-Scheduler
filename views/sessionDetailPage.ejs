@@ -303,7 +303,7 @@
         <li class="list-group-item text-danger" onclick="window.location.href='/'">Sign out</li>
       </ul>
       <button
-        class="btn btn-danger"
+        class="btn btn-danger backButton"
         style="
           width: 8%;
           margin: 15px;
@@ -314,6 +314,7 @@
           letter-spacing: 2px;
           font-size: 1.3vw;
         "
+        onclick=""
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -331,6 +332,20 @@
         </svg>
         Back
       </button>
+      <script>
+        const BackToSportDetail= document.querySelectorAll("button.backButton");
+        BackToSportDetail.forEach((anchor) => {
+          anchor.addEventListener("click", function (event) {
+            event.preventDefault();
+            const text = document.querySelector("span.nameOfSport").innerText;
+            const url =
+              "/Sports/" +
+              encodeURIComponent(text);
+            this.setAttribute("onclick", `window.location.href='${url}'`);
+            window.location.href = url;
+          });
+        });
+      </script>
       <div class="flex" style="display: flex; width: 100%; flex-direction: row">
         <h1 class="mx-5" style="color: white; font-family: pacifico">
             <span class="nameOfSport"><%= sessionSportName%></span> <span style="color: rgb(175, 170, 170)">Session #</span><span class="idOfSession" style="color: rgb(175, 170, 170)"><%= sessionSportId%></span>

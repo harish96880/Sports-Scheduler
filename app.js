@@ -261,6 +261,15 @@ app.delete(
 );
 
 //***************************************Sports Scheduler*********************************************
+app.post(
+  "/updateSport",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const oldSportName = request.body.Check_Sports_Name;
+    const newSportName = request.body.Sports_Name_Update;
+  }
+);
+
 app.get(
   "/Sports/:name/deleteSession/:id",
   connectEnsureLogin.ensureLoggedIn(),
@@ -333,6 +342,9 @@ app.get(
         sportmatch: sessionSportName,
       },
     });
+    console.log("====================================");
+    console.log(request.user.id);
+    console.log("====================================");
     response.render("sessionDetailPage", {
       "csrfToken": request.csrfToken(), //prettier-ignore
       sessionSportName,
@@ -385,6 +397,10 @@ app.get(
   async function (request, response) {
     const SportsName = request.params.name;
     const getSportName = await sessions.getSport(SportsName);
+    const getDate = new Date().toISOString();
+    console.log("====================================");
+    console.log(request.user.id);
+    console.log("====================================");
     // const getSessionsTime = await SessionsV3.findOne({
     //   where: {
     //     sportname2: SportsName,
@@ -396,6 +412,33 @@ app.get(
       name: SportsName,
       "csrfToken": request.csrfToken(), //prettier-ignore
       getSportName,
+      getDate,
+    });
+  }
+);
+
+app.get(
+  "/Sports/n/:name",
+  connectEnsureLogin.ensureLoggedIn(),
+  async function (request, response) {
+    const SportsName = request.params.name;
+    const getSportName = await sessions.getSport(SportsName);
+    const getDate = new Date().toISOString();
+    console.log("====================================");
+    console.log(request.user.id);
+    console.log("====================================");
+    // const getSessionsTime = await SessionsV3.findOne({
+    //   where: {
+    //     sportname2: SportsName,
+    //   },
+    // });
+
+    console.log(getSportName);
+    return response.render("usersportDetailPage", {
+      name: SportsName,
+      "csrfToken": request.csrfToken(), //prettier-ignore
+      getSportName,
+      getDate,
     });
   }
 );
@@ -449,7 +492,24 @@ app.post(
     ) {
       return response.redirect("/admin");
     }
-    response.redirect("/todos");
+    response.redirect("/userHomePage");
+  }
+);
+
+app.get(
+  "/userHomePage",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    console.log("====================================");
+    console.log(request.user.id);
+    console.log("====================================");
+    const sportsItems = await Sports.findAll();
+    if (request.accepts("html")) {
+      response.render("userHomePage", {
+        sportsItems: sportsItems,
+        "csrfToken": request.csrfToken(), //prettier-ignore
+      });
+    }
   }
 );
 

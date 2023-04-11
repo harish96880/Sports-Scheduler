@@ -31,12 +31,23 @@
         margin: 0;
         box-sizing: border-box;
       }
+      ::-moz-selection {
+        /* Code for Firefox */
+        color: white;
+        background: orange;
+      }
+
+      ::selection {
+        color: white;
+        background: orange;
+      }
       body {
         overflow-x: hidden;
       }
       #closeSvg {
         cursor: pointer;
       }
+
       #formContainer {
         display: none;
         position: absolute;
@@ -64,14 +75,14 @@
         flex-direction: column;
       }
       #loginBtn {
-        width: 10%;
-        height: 4vh;
+        width: 13%;
+        height: 10%;
         border: 1px solid orange;
         background-color: transparent;
         color: white;
         font-weight: 500;
         letter-spacing: 2px;
-        font-size: 18px;
+        font-size: 100%;
         padding: 2px;
         box-shadow: 1px 1px 5px 1px rgba(255, 166, 0, 0.319);
         font-family: Pacifico;
@@ -82,11 +93,12 @@
       }
       #glowBtn {
         position: relative;
-        padding: 5px 0px 5px 20px;
-        width: 10%;
+        padding: 5px;
+        width: 15vw;
         font-size: 1.2vw;
         box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4);
         color: #ffffff;
+        text-align: center;
         text-decoration: none;
         text-transform: uppercase;
         letter-spacing: 4px;
@@ -182,6 +194,20 @@
       }
       .section_our_solution .row {
         align-items: center;
+      }
+
+      @media screen and (min-width: 320px) {
+        #formSignupContainer {
+          display: none;
+          position: absolute;
+          top: 15%;
+          left: 35%;
+          width: 50vw;
+          height: 70vh;
+          background-color: #fff;
+          border-radius: 32px;
+          box-shadow: 1px 1px 6px 1px rgb(255, 254, 254);
+        }
       }
 
       #formSignupContainer {

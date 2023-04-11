@@ -30,6 +30,7 @@
 
       }
       #home{
+        height: 10vh!important;
         background: radial-gradient(circle at 100% 52.9%, rgba(255, 123, 0, 0.796) 0%, rgba(255, 123, 0, 0.796) 15.9%, rgba(255, 163, 77, 0.762) 15.9%, rgba(255, 163, 77, 0.705) 24.4%, rgb(19, 30, 37) 24.5%, rgb(19, 30, 37) 66%);
       }
       * {
@@ -616,24 +617,6 @@
           >
             <span style="color: rgba(255, 166, 0, 0.819)">Sports</span> Scheduler
           </p>
-          <p
-            class="my-2"
-            id="adminView"
-            style="
-              border: 2px solid white;
-              padding: 1px;
-              width: 5%;
-              border-radius: 32px;
-              text-align: center;
-              font-size: 0.9vw;
-              font-weight: 800;
-              background-color: rgb(8, 115, 0);
-              font-family: pacifico;
-              letter-spacing: 2px;
-            "
-          >
-            Admin
-          </p>
           <button
             class="navbar-toggler"
             type="button"
@@ -710,25 +693,6 @@
           justify-content: center;
         "
       >
-        
-
-        
-        <div class="row">
-            <div class="col-lg-8">
-                <h1 style="font-family: pacifico; color: rgba(255, 166, 0, 0.819); font-size: 3.5vw;">Create Sport</h1>
-                <p class="h4 w-75 my-4" style="color: rgb(196, 196, 196); font-family: pacifico;">Enter the sports name you want to add which will display to all other users</p>
-                <form action="/newsport" method="post">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                <input type="text" name="Sports_Name" id="createSport" placeholder="Create sport" required>
-                <button type="submit" class="btn" id="createBtn">Create</button>
-                </form>
-            </div>
-            <div class="col-lg-4">
-                <img src="./bg3.jpg" style="opacity: .9; box-shadow: 0px 1px 19px 0px rgb(0, 0, 0); border-radius: 12px;" width="400px" alt="">
-            </div>
-        </div>
-    </section>
-    <section>
       <h1 class="m-5" style="font-family: pacifico; color: rgba(255, 166, 0, 0.819); font-size: 3.5vw;">Available <span style="color:rgba(255, 255, 255, 0.772)">Sports</span></h1>
       <div class="grid">
         <% sportsItems.forEach(function(user) { %>
@@ -737,10 +701,7 @@
           <h1 style="color: transparent; font-family: pacifico;" class="getSportId" ><%= user.id %></h1>
             <h1 style="color: rgba(255, 255, 255, 0.819); font-family: pacifico;" class="getSportId" id="getNameOfSport" onclick="window.location.href='/SportDetail'"><%= user.Sports_Name %></h1>
             <div class="row">
-              <div class="col-lg-12 my-5 sportsButtonsDiv">
-                
-                <a class="sportsButtons btn btn-danger deleteSport" href = ''><%= user.id %></a>
-              </div>
+              
             </div>
         </div>
         
@@ -751,39 +712,26 @@
             anchor.addEventListener("click", function (event) {
               event.preventDefault();
               const text = this.innerText;
-              const url = "/Sports/" + encodeURIComponent(text);
+              const url = "/Sports/n/" + encodeURIComponent(text);
               this.setAttribute("href", url);
               window.location.href = url;
              });
           });
         </script>
-        <script>
-          const deleteanchors = document.querySelectorAll("a.deleteSport");
-          deleteanchors.forEach((anchor) => {
-            anchor.addEventListener("click", function (event) {
-              event.preventDefault();
-              const text = this.innerText;
-              window.alert(text)
-              const url = "/delete/" + encodeURIComponent(text);
-              this.setAttribute("href", url);
-              window.location.href = url; 
-      });
-    });
-        </script>
+
         <script>
             const anchors = document.querySelectorAll("a.link");
             anchors.forEach((anchor) => {
               anchor.addEventListener("click", function (event) {
                 event.preventDefault(); 
                 const text = this.innerText;
-                const url = "/Sports/" + encodeURIComponent(text);
+                const url = "/Sports/n/" + encodeURIComponent(text);
                 this.setAttribute("href", url);
                 window.location.href = url; 
               });
             });
           </script>
       </div>
-      
     </section>
   </body>
 </html>
