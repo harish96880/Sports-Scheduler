@@ -5,71 +5,745 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="<%= csrfToken %>" />
-
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <title><%= title %></title>
     <!--Bootstrap-->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
       crossorigin="anonymous"
     />
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
       crossorigin="anonymous"
     ></script>
-
-    <!--CSS File-->
-    <link href="./css/styles.css" rel="stylesheet" />
-
-    <!-- <script>
-      var token = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-      function updateTodo(id) {
-        const boolean = document.querySelector(`#todo-checkbox-${id}`).checked;
-        console.log(boolean);
-        fetch(`/todos/${id}`, {
-          method: "put",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            completed: boolean,
-            _csrf: token,
-          }),
-        })
-          .then((res) => {
-            if (res.ok) {
-              window.location.reload();
-            }
-          })
-          .catch((err) => console.error(err));
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+      section {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+      }
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        overflow-x: hidden;
+      }
+      #closeSvg {
+        cursor: pointer;
+      }
+      #formContainer {
+        display: none;
+        position: absolute;
+        top: 25%;
+        left: 35%;
+        width: 30vw;
+        height: 50vh;
+        background-color: #fff;
+        border-radius: 32px;
+        box-shadow: 1px 1px 6px 1px rgb(255, 254, 254);
+      }
+      .loginInput {
+        width: 75%;
+        height: 7vh;
+        margin: 5px;
+        border: none;
+        background-color: whitesmoke;
+        border-radius: 32px;
+      }
+      #home {
+        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),
+          url("./bg1.jpg");
+        background-size: cover;
+        background-position: center;
+        flex-direction: column;
+      }
+      #loginBtn {
+        width: 10%;
+        height: 4vh;
+        border: 1px solid orange;
+        background-color: transparent;
+        color: white;
+        font-weight: 500;
+        letter-spacing: 2px;
+        font-size: 18px;
+        padding: 2px;
+        box-shadow: 1px 1px 5px 1px rgba(255, 166, 0, 0.319);
+        font-family: Pacifico;
+      }
+      #loginBtn:hover {
+        background-color: orange;
+        transition: 0.8s;
+      }
+      #glowBtn {
+        position: relative;
+        padding: 5px 0px 5px 20px;
+        width: 10%;
+        font-size: 1.2vw;
+        box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4);
+        color: #ffffff;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        overflow: hidden;
+        font-weight: bold;
+        box-shadow: 1px 1px 5px 1px black;
       }
 
-      function deleteTodo(id) {
-        fetch(`/todos/${id}`, {
-          method: "delete",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            _csrf: token,
-          }),
-        })
-          .then((res) => {
-            if (res.ok) {
-              window.location.reload();
-            }
-          })
-          .catch((err) => console.error(err));
+      #glowBtn span:nth-child(1) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(to right, #171618, orange);
+        animation: animate1 2s linear infinite;
       }
-    </script> -->
 
-    <!-- Tailwind css
-    <script src="https://cdn.tailwindcss.com"></script> -->
+      @keyframes animate1 {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
 
-    <title><%= title %></title>
+      #glowBtn span:nth-child(2) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 3px;
+        background: linear-gradient(to bottom, #171618, orange);
+        animation: animate2 2s linear infinite;
+        animation-delay: 1s;
+      }
+      @keyframes animate2 {
+        0% {
+          transform: translateY(-100%);
+        }
+        100% {
+          transform: translateY(100%);
+        }
+      }
+
+      #glowBtn span:nth-child(3) {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(to left, #171618, orange);
+        animation: animate3 2s linear infinite;
+      }
+
+      @keyframes animate3 {
+        0% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      #glowBtn span:nth-child(4) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 3px;
+        background: linear-gradient(to top, #171618, orange);
+        animation: animate4 2s linear infinite;
+        animation-delay: 1s;
+      }
+
+      @keyframes animate4 {
+        0% {
+          transform: translateY(100%);
+        }
+        100% {
+          transform: translateY(-100%);
+        }
+      }
+
+      #glowBtn:hover {
+        background-color: orange;
+        border-radius: 12px;
+        transition: 1s;
+      }
+      #features {
+        background: linear-gradient(#0e0e0e, #202020);
+      }
+      .section_our_solution .row {
+        align-items: center;
+      }
+
+      #formSignupContainer {
+        display: none;
+        position: absolute;
+        top: 15%;
+        left: 35%;
+        width: 30vw;
+        height: 70vh;
+        background-color: #fff;
+        border-radius: 32px;
+        box-shadow: 1px 1px 6px 1px rgb(255, 254, 254);
+      }
+
+      .our_solution_category {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .our_solution_category .solution_cards_box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .solution_cards_box .solution_card {
+        flex: 0 50%;
+        background: #fff;
+        box-shadow: 0 2px 4px 0 rgba(136, 144, 195, 0.2),
+          0 5px 15px 0 rgba(37, 44, 97, 0.15);
+        border-radius: 15px;
+        margin: 8px;
+        padding: 10px 15px;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        min-height: 265px;
+        transition: 0.7s;
+      }
+
+      .solution_cards_box .solution_card:hover {
+        background: orange;
+        color: #fff;
+        transform: scale(1.1);
+        z-index: 9;
+      }
+
+      .solution_cards_box .solution_card:hover::before {
+        background: rgb(85 108 214 / 10%);
+      }
+
+      .solution_cards_box .solution_card:hover .solu_title h3,
+      .solution_cards_box .solution_card:hover .solu_description p {
+        color: #fff;
+      }
+
+      .solution_cards_box .solution_card:before {
+        content: "";
+        position: absolute;
+        background: rgb(85 108 214 / 5%);
+        width: 170px;
+        height: 400px;
+        z-index: -1;
+        transform: rotate(42deg);
+        right: -56px;
+        top: -23px;
+        border-radius: 35px;
+      }
+
+      .solution_cards_box .solution_card:hover .solu_description button {
+        background: #fff !important;
+        color: orange;
+      }
+
+      .solution_card .so_top_icon {
+      }
+
+      .solution_card .solu_title h3 {
+        color: #212121;
+        font-size: 1.3rem;
+        margin-top: 13px;
+        margin-bottom: 13px;
+      }
+
+      .solution_card .solu_description p {
+        font-size: 15px;
+        margin-bottom: 15px;
+      }
+
+      .solution_card .solu_description button {
+        border: 0;
+        border-radius: 15px;
+        background: linear-gradient(
+          140deg,
+          #42c3ca 0%,
+          #42c3ca 50%,
+          #42c3cac7 75%
+        ) !important;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1rem;
+        padding: 5px 16px;
+      }
+
+      .our_solution_content h1 {
+        text-transform: capitalize;
+        margin-bottom: 1rem;
+        font-size: 2.5rem;
+      }
+      .our_solution_content p {
+      }
+
+      .hover_color_bubble {
+        position: absolute;
+        background: rgb(54 81 207 / 15%);
+        width: 100rem;
+        height: 100rem;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        top: 16rem;
+        border-radius: 50%;
+        transform: rotate(-36deg);
+        left: -18rem;
+        transition: 0.7s;
+      }
+
+      .solution_cards_box .solution_card:hover .hover_color_bubble {
+        top: 0rem;
+      }
+
+      .solution_cards_box .solution_card .so_top_icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #fff;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .solution_cards_box .solution_card .so_top_icon img {
+        width: 40px;
+        height: 50px;
+        object-fit: contain;
+      }
+
+      /*start media query*/
+      @media screen and (min-width: 320px) {
+        .sol_card_top_3 {
+          position: relative;
+          top: 0;
+        }
+
+        .our_solution_category {
+          width: 100%;
+          margin: 0 auto;
+        }
+
+        .our_solution_category .solution_cards_box {
+          flex: auto;
+        }
+      }
+      @media only screen and (min-width: 768px) {
+        .our_solution_category .solution_cards_box {
+          flex: 1;
+        }
+      }
+      @media only screen and (min-width: 1024px) {
+        .sol_card_top_3 {
+          position: relative;
+          top: -3rem;
+        }
+        .our_solution_category {
+          width: 50%;
+          margin: 0 auto;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Sports Scheduler</h1>
-    <a href="/login">Sign-in</a><br />
-    <a href="/signup">Sign Up</a>
+    <section id="home">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <p
+            class="h2 text-white mx-3"
+            style="font-family: Pacifico; font-weight: 300"
+          >
+            <span style="color: orange">Sports</span> Scheduler
+          </p>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link disabled"></a>
+              </li>
+            </ul>
+
+            <button
+              class="btn btn-outline-success"
+              id="loginBtn"
+              type="submit"
+              onclick="loginForm()"
+            >
+              Login
+            </button>
+            <script>
+              function loginForm() {
+                document.getElementById("home").style.background =
+                  "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1)),url('./bg1.jpg')";
+                document.getElementById("home").style.backgroundSize = "cover";
+                document.getElementById("home").style.backgroundPosition =
+                  "center";
+                document.getElementById("home").style.transition = "1s";
+                const element = document.getElementById("formContainer");
+                element.style.display = "block";
+              }
+            </script>
+          </div>
+        </div>
+      </nav>
+      <hr class="m-0" style="border: 2px solid rgb(59, 57, 57)" />
+      <div
+        class="div"
+        style="
+          width: 100%;
+          min-height: 90vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        "
+      >
+        <h1
+          class="w-50"
+          style="font-family: Pacifico; color: rgba(255, 255, 255, 0.848)"
+        >
+          Welcome to
+          <span style="color: rgba(255, 166, 0, 0.784)">Sports Scheduler</span>,
+          Explore our website to create sports sessions
+        </h1>
+        <br /><br />
+        <a id="glowBtn" href="#features">
+          <span> </span>
+          <span> </span>
+          <span> </span>
+          <span> </span>
+          Explore
+        </a>
+      </div>
+    </section>
+    <section id="features">
+      <div class="section_our_solution">
+        <br /><br /><br /><br /><br /><br /><br /><br />
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="our_solution_category">
+              <div class="solution_cards_box">
+                <div class="solution_card">
+                  <div class="hover_color_bubble"></div>
+                  <div class="so_top_icon">
+                    <lottie-player
+                      src="https://assets7.lottiefiles.com/packages/lf20_lz5rbiit.json"
+                      background="transparent"
+                      speed="1"
+                      style="width: 300px; height: 300px"
+                      loop
+                      autoplay
+                    ></lottie-player>
+                  </div>
+                  <div class="solu_title">
+                    <h3>Create Sport</h3>
+                  </div>
+                  <div class="solu_description">
+                    <p>
+                      Admins are able to create a sport what they want who
+                      manages all sports and sessions. He takes the control over
+                      the website
+                    </p>
+                    <button type="button" class="read_more_btn">
+                      Read More
+                    </button>
+                  </div>
+                </div>
+                <div class="solution_card">
+                  <div class="hover_color_bubble"></div>
+                  <div class="so_top_icon">
+                    <lottie-player
+                      src="https://assets10.lottiefiles.com/packages/lf20_y8wovcjv.json"
+                      background="transparent"
+                      speed="1"
+                      style="width: 500px; height: 500px"
+                      loop
+                      autoplay
+                    ></lottie-player>
+                  </div>
+                  <div class="solu_title">
+                    <h3>Sign Up</h3>
+                  </div>
+                  <div class="solu_description">
+                    <p>
+                      New Users can able to register to this website using
+                      personal credentials. Your data must be safe with us
+                    </p>
+                    <button type="button" class="read_more_btn">
+                      Read More
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="solution_cards_box sol_card_top_3">
+                <div class="solution_card">
+                  <div class="hover_color_bubble"></div>
+                  <div class="so_top_icon">
+                    <lottie-player
+                      src="https://assets2.lottiefiles.com/packages/lf20_dfulynng.json"
+                      background="transparent"
+                      speed="1"
+                      style="width: 300px; height: 300px"
+                      loop
+                      autoplay
+                    ></lottie-player>
+                  </div>
+                  <div class="solu_title">
+                    <h3>Update Session</h3>
+                  </div>
+                  <div class="solu_description">
+                    <p>
+                      Users can only able to modify the sessions which are
+                      created by them. They can also join other's session.
+                    </p>
+                    <button type="button" class="read_more_btn">
+                      Read More
+                    </button>
+                  </div>
+                </div>
+                <div class="solution_card">
+                  <div class="hover_color_bubble"></div>
+                  <div class="so_top_icon">
+                    <lottie-player
+                      src="https://assets7.lottiefiles.com/packages/lf20_dDFzRzv97x.json"
+                      background="transparent"
+                      speed="1"
+                      style="width: 300px; height: 300px"
+                      loop
+                      autoplay
+                    ></lottie-player>
+                  </div>
+                  <div class="solu_title">
+                    <h3>Track Session</h3>
+                  </div>
+                  <div class="solu_description">
+                    <p>
+                      Users are able to track how many session they joined. Also
+                      they can easily left the session before it starts
+                    </p>
+                    <button type="button" class="read_more_btn">
+                      Read More
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="container formLogin shadow-lg" id="formContainer">
+      <form action="/session" method="post">
+        <h1
+          align="center"
+          class="my-3"
+          style="color: rgb(255, 166, 0); font-family: Pacifico"
+        >
+          Login
+        </h1>
+        <svg
+          onclick="closeForm()"
+          style="
+            position: absolute;
+            top: 0%;
+            left: 100%;
+            color: white;
+            background-color: red;
+            border-radius: 32px;
+            border: none;
+          "
+          id="closeSvg"
+          xmlns="http://www.w3.org/2000/svg"
+          width="26"
+          height="26"
+          fill="currentColor"
+          class="bi bi-x-circle"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+          />
+          <path
+            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+          />
+        </svg>
+        <script>
+          function closeForm() {
+            document.getElementById("home").style.background =
+              "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),url('./bg1.jpg')";
+            document.getElementById("home").style.backgroundSize = "cover";
+            document.getElementById("home").style.backgroundPosition = "center";
+            document.getElementById("home").style.transition = "1s";
+            document.getElementById("formContainer").style.display = "none";
+          }
+        </script>
+        <hr />
+        <center>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <input
+            type="email"
+            class="loginInput p-3"
+            placeholder="Enter your email"
+            name="email"
+            id=""
+          /><br />
+          <input
+            type="password"
+            placeholder="password"
+            class="loginInput p-3"
+            name="password"
+            id=""
+          /><br /><br />
+          <button
+            type="submit"
+            class="btn w-50"
+            style="
+              background-color: orange;
+              color: white;
+              font-weight: 600;
+              font-size: 1.7vw;
+            "
+          >
+            Login
+          </button>
+          <br /><br />
+          <label
+            >Don't have an account?
+            <a href="#" onclick="SignUp()">Sign up</a></label
+          >
+          <script>
+            function SignUp() {
+              document.getElementById("formContainer").style.display = "none";
+              document.getElementById("formSignupContainer").style.display =
+                "block";
+            }
+          </script>
+        </center>
+      </form>
+    </div>
+    <div class="container formLogin shadow-lg" id="formSignupContainer">
+      <form action="/users" method="post">
+        <h1
+          align="center"
+          class="my-3"
+          style="color: rgb(255, 166, 0); font-family: Pacifico"
+        >
+          Signup
+        </h1>
+        <svg
+          onclick="closeFormSignup()"
+          style="
+            position: absolute;
+            top: 0%;
+            left: 100%;
+            color: white;
+            background-color: red;
+            border-radius: 32px;
+            border: none;
+          "
+          id="closeSvg"
+          xmlns="http://www.w3.org/2000/svg"
+          width="26"
+          height="26"
+          fill="currentColor"
+          class="bi bi-x-circle"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+          />
+          <path
+            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+          />
+        </svg>
+        <script>
+          function closeFormSignup() {
+            document.getElementById("formSignupContainer").style.display =
+              "none";
+          }
+        </script>
+        <hr />
+        <center>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First name"
+            id=""
+            class="loginInput p-3"
+          />
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last name"
+            id=""
+            class="loginInput p-3"
+          />
+          <input
+            type="text"
+            class="loginInput p-3"
+            placeholder="Enter your email"
+            name="email"
+            id=""
+          /><br />
+          <input
+            type="password"
+            placeholder="password"
+            class="loginInput p-3"
+            name="password"
+            id=""
+          /><br /><br />
+          <button
+            type="submit"
+            class="btn w-50"
+            style="
+              background-color: orange;
+              color: white;
+              font-weight: 600;
+              font-size: 1.7vw;
+            "
+          >
+            Signup
+          </button>
+          <br /><br />
+          <label>Don't have an account? <a href="#">Sign up</a></label>
+        </center>
+      </form>
+    </div>
   </body>
 </html>

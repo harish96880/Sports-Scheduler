@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+      crossorigin="anonymous"
+    ></script>
+
+    <!--CSS File-->
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+      section {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+        flex-direction: column;
+        background: radial-gradient(rgb(19, 30, 37) 24.5%, rgb(19, 30, 37) 66%);
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        color: white;
+      }
+      body {
+        overflow-x: hidden;
+      }
+      #formSignupContainer {
+        display: none;
+        position: absolute;
+        top: 15%;
+        left: 35%;
+        width: 30vw;
+        height: 70vh;
+        background-color: #fff;
+        border-radius: 32px;
+        box-shadow: 1px 1px 6px 1px rgb(255, 254, 254);
+      }
+
+      #formSignupContainer input {
+        color: black;
+      }
+
+      .loginInput {
+        width: 75%;
+        height: 7vh;
+        margin: 5px;
+        border: none;
+        background-color: whitesmoke;
+        border-radius: 32px;
+      }
+      #loginBtn {
+        width: 10%;
+        height: 4vh;
+        border: 1px solid red;
+        background-color: transparent;
+        color: white;
+        font-weight: 500;
+        letter-spacing: 2px;
+        font-size: 18px;
+        padding: 0px;
+        box-shadow: 1px 2px 10px 2px rgba(255, 0, 0, 0.556);
+        font-family: Pacifico;
+      }
+      #loginBtn:hover {
+        background-color: red;
+        transition: 0.8s;
+      }
+      #contactIcon {
+        background-color: transparent;
+        padding: 5px;
+        font-weight: bold;
+        width: 42px;
+        height: 42px;
+        border-radius: 32px;
+        cursor: pointer;
+        border: 6px solid rgb(255, 166, 0);
+        box-shadow: 1px 1px 3px 1px rgba(255, 166, 0, 0.511);
+      }
+      #contactIcon:hover {
+        background-color: rgb(255, 166, 0);
+        transition: 0.8s;
+      }
+      #adminOptions {
+        display: none;
+        margin-top: 65px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      #adminOptions li:hover {
+        background-color: rgb(218, 142, 0);
+        color: white;
+        transition: 0.5s;
+      }
+      #adminOptions .text-danger:hover {
+        background-color: rgb(255, 72, 72);
+        color: white !important;
+        transition: 0.5s;
+      }
+
+      .grid {
+        width: 100%;
+        display: grid;
+        grid-gap: 1%;
+        grid-template-columns: 30% 30% 30%;
+      }
+      .editOptBtns {
+        width: 6%;
+        height: 5vh;
+        font-size: 1vw;
+        font-family: pacifico;
+        border-radius: 32px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        box-shadow: 1px 1px 10px 2px black;
+        margin: 5px;
+        margin-top: 35px;
+      }
+      .block {
+        position: absolute;
+        width: 100%;
+        height: 10vh;
+        background-color: transparent;
+      }
+      #sportEditContainer {
+        display: none;
+        position: absolute;
+        top: 30%;
+        left: 35%;
+        width: 30vw;
+        height: 32vh;
+        background-color: #fff;
+        border-radius: 32px;
+        box-shadow: 1px 1px 6px 1px rgb(255, 254, 254);
+        z-index: 2;
+      }
+
+      #sportEditContainer input {
+        color: black;
+      }
+    </style>
+
+    <title><%= name%></title>
+  </head>
+  <body>
+    <section id="home">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <p
+            class="h2 text-white mx-3"
+            style="font-family: Pacifico; font-weight: 300"
+          >
+            <span style="color: rgba(255, 166, 0, 0.819)">Sports</span>
+            Scheduler
+          </p>
+          <p
+            class="my-2"
+            id="adminView"
+            style="
+              border: 2px solid white;
+              padding: 1px;
+              width: 5%;
+              border-radius: 32px;
+              text-align: center;
+              font-size: 0.9vw;
+              font-weight: 800;
+              background-color: rgb(8, 115, 0);
+              font-family: pacifico;
+              letter-spacing: 2px;
+            "
+          >
+            Admin
+          </p>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link disabled"></a>
+              </li>
+            </ul>
+            <p
+              class="m-2 mx-3 h4"
+              style="font-family: pacifico; color: rgba(255, 166, 0, 0.819)"
+            >
+              Hello <span style="color: rgb(255, 255, 255)">Harish</span>
+            </p>
+
+            <svg
+              id="contactIcon"
+              onclick="ShowAdminOptions()"
+              xmlns="http://www.w3.org/2000/svg"
+              width="36"
+              height="36"
+              fill="currentColor"
+              class="bi bi-person"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"
+              />
+            </svg>
+
+            <script>
+              function ShowAdminOptions() {
+                const element = document.getElementById("adminOptions");
+                if (element.style.display == "block") {
+                  element.style.display = "none";
+                } else {
+                  element.style.display = "block";
+                }
+              }
+            </script>
+          </div>
+        </div>
+      </nav>
+      <hr class="m-0" style="border: 2px solid rgb(59, 57, 57)" />
+      <ul
+        class="list-group"
+        id="adminOptions"
+        style="position: absolute; left: 90%"
+      >
+        <li class="list-group-item">View Reports</li>
+        <li
+          class="list-group-item text-danger"
+          onclick="window.location.href='/'"
+        >
+          Sign out
+        </li>
+      </ul>
+      <button
+        class="btn btn-danger"
+        style="
+          width: 8%;
+          margin: 15px;
+          border-radius: 32px;
+          box-shadow: 1px 1px 10px 1px rgba(255, 0, 0, 0.608);
+          font-weight: 700;
+          font-family: pacifico;
+          letter-spacing: 2px;
+          font-size: 1.3vw;
+        "
+        onclick="window.location.href='/admin'"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="26"
+          fill="currentColor"
+          class="bi bi-arrow-left"
+          viewBox="0 0 16 16"
+          style="margin: 4px"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+          />
+        </svg>
+        Back
+      </button>
+      <div class="flex" style="display: flex; flex-direction: row">
+        <h1
+          style="font-family: pacifico; margin: 15px; font-size: 4vw"
+          class="nameOfSport"
+        >
+          <%= name%>
+        </h1>
+        <button class="btn btn-primary editOptBtns" onclick="showUpdateOpt()">
+          Edit
+        </button>
+        <script>
+          function showUpdateOpt() {
+            document.getElementById("sportEditContainer").style.display =
+              "block";
+          }
+        </script>
+        <a
+          class="btn btn-success editOptBtns"
+          style="width: 6%"
+          onclick="showCreateSessionCard()"
+          >New +
+        </a>
+        <script>
+          function showCreateSessionCard() {
+            document.getElementById("formSignupContainer").style.display =
+              "block";
+          }
+        </script>
+        <script>
+          const anchors = document.querySelectorAll("a.anchorPrimary");
+          anchors.forEach((anchor) => {
+            anchor.addEventListener("click", function (event) {
+              event.preventDefault(); // prevent the default behavior of clicking an anchor tag
+              const text = document.querySelector("h1.nameOfSport").innerText;
+              const url = "/Sports/" + encodeURIComponent(text) + "/NewSession";
+              this.setAttribute("href", url);
+              window.location.href = url;
+            });
+          });
+        </script>
+      </div>
+      <h1
+        style="
+          font-family: pacifico;
+          margin: 0px;
+          color: rgb(192, 191, 191);
+          font-size: 2vw;
+        "
+      >
+        Upcoming <span style="color: orange">Sessions</span>
+      </h1>
+      <div class="grid">
+        <% getSportName.forEach(function(user, index) { %>
+        <div
+          class="card w-100 mx-5 my-3"
+          style="height: 10vh; text-align: center; cursor: pointer"
+          onclick=""
+        >
+          <div class="block" onclick="" style="color: transparent">
+            <%= user.id %>
+          </div>
+          <p
+            class="w-100"
+            style="
+              padding: 10px;
+              height: 10vh;
+              display: flex;
+              align-items: center;
+              color: black;
+              font-size: 1.6vw;
+              font-weight: 300;
+              font-family: pacifico;
+            "
+          >
+            <%= user.session %> @
+            <span style="color: rgb(71, 71, 71)"><%= user.time %></span>
+            <span
+              style="
+                float: right;
+                color: rgb(0, 72, 255);
+                padding-left: 90px;
+                font-size: 24px;
+              "
+              ><%= user.countOfPlayers%> slots</span
+            >
+          </p>
+        </div>
+        <% }); %>
+        <script>
+          const sessionPage = document.querySelectorAll("div.block");
+          sessionPage.forEach((anchor) => {
+            anchor.addEventListener("click", function (event) {
+              event.preventDefault();
+              const text = document.querySelector("h1.nameOfSport").innerText;
+              const id = this.innerText;
+              const url =
+                "/Sports/" +
+                encodeURIComponent(text) +
+                "/sessionDetail/" +
+                encodeURIComponent(id);
+              this.setAttribute("onclick", `window.location.href='${url}'`);
+              window.location.href = url;
+            });
+          });
+        </script>
+      </div>
+      <h1
+        style="
+          font-family: pacifico;
+          margin-top: 51px;
+          color: rgb(192, 191, 191);
+          font-size: 2vw;
+        "
+      >
+        Previous <span style="color: orange">Sessions</span>
+      </h1>
+      <!-- <div class="grid">
+        <% getSportName.forEach(function(user, index) { %>
+        <div
+          class="card w-100 mx-5 my-3"
+          style="
+            height: 10vh;
+            text-align: center;
+            background-color: rgb(254, 47, 57);
+          "
+        >
+          <p
+            class="w-100"
+            style="
+              padding: 10px;
+              height: 10vh;
+              display: flex;
+              align-items: center;
+              color: black;
+              font-size: 1.8vw;
+              font-weight: 300;
+              font-family: pacifico;
+            "
+          >
+            <%= user.session %>
+            <span
+              style="
+                float: right;
+                color: rgb(255, 255, 255);
+                padding-left: 90px;
+              "
+              >slots unavailable</span
+            >
+          </p>
+        </div>
+        <% }); %>
+      </div> -->
+      <div class="container formLogin shadow-lg" id="formSignupContainer">
+        <form action="" method="post">
+          <h1
+            align="center"
+            class="my-3"
+            style="color: rgb(241, 157, 0); font-family: Pacifico"
+          >
+            New Session
+          </h1>
+          <svg
+            onclick="closeFormSignup()"
+            style="
+              position: absolute;
+              top: 0%;
+              left: 100%;
+              color: white;
+              background-color: red;
+              border-radius: 32px;
+              border: none;
+            "
+            id="closeSvg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            fill="currentColor"
+            class="bi bi-x-circle"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+            />
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+          <script>
+            function closeFormSignup() {
+              document.getElementById("formSignupContainer").style.display =
+                "none";
+            }
+          </script>
+          <hr />
+          <center>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <input
+              type="date"
+              name="session"
+              placeholder="Enter the session date"
+              id=""
+              class="loginInput p-3"
+              required
+            />
+            <input
+              type="time"
+              name="time"
+              placeholder="time"
+              id=""
+              class="loginInput p-3"
+              required
+            />
+            <input
+              type="text"
+              name="Address"
+              placeholder="where the session will be held"
+              id=""
+              class="loginInput p-3"
+              required
+            />
+            <input
+              type="hidden"
+              class="loginInput p-3"
+              placeholder="who all are participating"
+              name="players"
+              id=""
+              required
+            /><br />
+            <input
+              type="number"
+              placeholder="how many players do you need"
+              class="loginInput p-3"
+              name="numberOfPlayers"
+              id=""
+              required
+            /><br />
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              class="my-3 mx-3"
+              required
+            /><label class="my-3 text-dark"
+              >I agree to create this session</label
+            ><br />
+            <button
+              type="submit"
+              class="btn w-50"
+              style="
+                background-color: orange;
+                color: white;
+                font-weight: 600;
+                font-size: 1.7vw;
+              "
+            >
+              Create
+            </button>
+            <br /><br />
+          </center>
+        </form>
+      </div>
+      <div class="container sportEdit shadow-lg" id="sportEditContainer">
+        <form action="/updateSport" method="post">
+          <h3
+            align="center"
+            class="my-3"
+            style="color: rgb(241, 157, 0); font-family: Pacifico"
+          >
+            Update Sport name for <span id="demo" class="text-dark"></span>
+          </h3>
+          <script>
+            const sportName =
+              document.querySelector("h1.nameOfSport").innerText;
+            document.getElementById("demo").innerHTML = sportName;
+          </script>
+          <svg
+            onclick="closeFormSignup()"
+            style="
+              position: absolute;
+              top: 0%;
+              left: 100%;
+              color: white;
+              background-color: red;
+              border-radius: 32px;
+              border: none;
+              cursor: pointer;
+            "
+            id="closeSvg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            fill="currentColor"
+            class="bi bi-x-circle"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+            />
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+          <script>
+            function closeFormSignup() {
+              document.getElementById("sportEditContainer").style.display =
+                "none";
+            }
+          </script>
+          <hr />
+          <center>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+            <input
+              type="text"
+              name="Sports_Name_Update"
+              placeholder="Enter new name"
+              id=""
+              class="loginInput p-3"
+              required
+            />
+            <br /><br />
+            <button
+              type="submit"
+              class="btn w-50"
+              style="
+                background-color: orange;
+                color: white;
+                font-weight: 600;
+                font-size: 1vw;
+              "
+            >
+              Update
+            </button>
+            <br /><br />
+          </center>
+        </form>
+      </div>
+    </section>
+  </body>
+</html>
