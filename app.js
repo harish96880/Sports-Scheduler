@@ -1,14 +1,6 @@
 const express = require("express");
 const app = express();
-const {
-  Todo,
-  User,
-  Sports,
-  sessions,
-  SessionsV3,
-  players,
-  sessionDateTime,
-} = require("./models");
+const { Todo, User, Sports, sessions, players } = require("./models");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { Model, Op } = require("sequelize");
