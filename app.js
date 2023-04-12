@@ -267,6 +267,23 @@ app.post(
   async (request, response) => {
     const oldSportName = request.body.Check_Sports_Name;
     const newSportName = request.body.Sports_Name_Update;
+    const updateSport = await Sports.update(
+      { Sports_Name: newSportName },
+      {
+        where: {
+          Sports_Name: oldSportName,
+        },
+      }
+    );
+    const updateSessionSportName = await sessions.update(
+      { sportname: newSportName },
+      {
+        where: {
+          sportname: oldSportName,
+        },
+      }
+    );
+    return response.redirect("/admin");
   }
 );
 
@@ -357,6 +374,45 @@ app.get(
 );
 
 app.get(
+  "/Sports/:name/sessionDetail/n/:id",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const sessionSportName = request.params.name;
+    const sessionSportId = request.params.id;
+    const UserId = request.user.id;
+    const getSessionDetail = await sessions.findOne({
+      where: {
+        id: sessionSportId,
+      },
+    });
+    const getPlayers = await players.findAll({
+      where: {
+        sessionId: sessionSportId,
+        sportmatch: sessionSportName,
+      },
+    });
+    const getPlayersCount = await players.count({
+      where: {
+        sessionId: sessionSportId,
+        sportmatch: sessionSportName,
+      },
+    });
+    console.log("====================================");
+    console.log(request.user.id);
+    console.log("====================================");
+    response.render("usersessionDetailPage", {
+      "csrfToken": request.csrfToken(), //prettier-ignore
+      sessionSportName,
+      sessionSportId,
+      getSessionDetail,
+      getPlayers,
+      getPlayersCount,
+      UserId,
+    });
+  }
+);
+
+app.get(
   "/SportDetail",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
@@ -398,6 +454,7 @@ app.get(
     const SportsName = request.params.name;
     const getSportName = await sessions.getSport(SportsName);
     const getDate = new Date().toISOString();
+    const UserId = request.user.id;
     console.log("====================================");
     console.log(request.user.id);
     console.log("====================================");
@@ -413,6 +470,7 @@ app.get(
       "csrfToken": request.csrfToken(), //prettier-ignore
       getSportName,
       getDate,
+      UserId,
     });
   }
 );
@@ -424,6 +482,12 @@ app.get(
     const SportsName = request.params.name;
     const getSportName = await sessions.getSport(SportsName);
     const getDate = new Date().toISOString();
+    const UserId = request.user.id;
+    const getUserName = await User.findOne({
+      where: {
+        id: request.user.id,
+      },
+    });
     console.log("====================================");
     console.log(request.user.id);
     console.log("====================================");
@@ -438,7 +502,9 @@ app.get(
       name: SportsName,
       "csrfToken": request.csrfToken(), //prettier-ignore
       getSportName,
+      getUserName,
       getDate,
+      UserId,
     });
   }
 );
@@ -449,6 +515,7 @@ app.post("/Sports/:name", async (request, response) => {
   const time = request.body.time;
   const address = request.body.Address;
   const playersCount = request.body.numberOfPlayers;
+  const userId = request.body.userId;
   try {
     const inputData = await sessions.create({
       sportname: request.params.name,
@@ -456,6 +523,7 @@ app.post("/Sports/:name", async (request, response) => {
       time: time,
       Address: address,
       countOfPlayers: playersCount,
+      userId: userId,
     });
     const PlayersName = await players.create({
       playerNames: request.body.players,
@@ -466,6 +534,36 @@ app.post("/Sports/:name", async (request, response) => {
     console.log(PlayersName);
     console.log("====================================");
     return response.redirect(`/Sports/${name}`);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post("/Sports/n/:name", async (request, response) => {
+  const Date = request.body.session;
+  const name = request.params.name;
+  const time = request.body.time;
+  const address = request.body.Address;
+  const playersCount = request.body.numberOfPlayers;
+  const userId = request.body.userId;
+  try {
+    const inputData = await sessions.create({
+      sportname: request.params.name,
+      session: Date,
+      time: time,
+      Address: address,
+      countOfPlayers: playersCount,
+      userId: userId,
+    });
+    const PlayersName = await players.create({
+      playerNames: request.body.players,
+      sportname: name,
+    });
+    console.log(inputData);
+    console.log("====================================");
+    console.log(PlayersName);
+    console.log("====================================");
+    return response.redirect(`/Sports/n/${name}`);
   } catch (error) {
     console.log(error);
   }
@@ -486,28 +584,36 @@ app.post(
   }),
   async (request, response) => {
     console.log(request.user);
+
     if (
       request.body.email === "adminhari@gmail.com" &&
       request.body.password === "admin9843"
     ) {
       return response.redirect("/admin");
     }
-    response.redirect("/userHomePage");
+    response.redirect(`/userHomePage/n`);
   }
 );
 
 app.get(
-  "/userHomePage",
+  "/userHomePage/n",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
+    const getUserName = await User.findOne({
+      where: {
+        id: request.user.id,
+      },
+    });
     console.log("====================================");
     console.log(request.user.id);
+    console.log(getUserName.firstName);
     console.log("====================================");
     const sportsItems = await Sports.findAll();
     if (request.accepts("html")) {
       response.render("userHomePage", {
         sportsItems: sportsItems,
-        "csrfToken": request.csrfToken(), //prettier-ignore
+        csrfToken: request.csrfToken(),
+        getUserName, //prettier-ignore
       });
     }
   }
@@ -517,6 +623,11 @@ app.get(
   "/admin",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
+    const getUserName = await User.findOne({
+      where: {
+        id: request.user.id,
+      },
+    });
     const sportsItems = await Sports.findAll();
     const sportsItemsUser = await Sports.findOne();
     if (request.accepts("html")) {
@@ -524,6 +635,7 @@ app.get(
         sportsItems: sportsItems,
         "csrfToken": request.csrfToken(), //prettier-ignore
         user: sportsItemsUser,
+        getUserName,
       });
     }
   }

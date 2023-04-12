@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+      crossorigin="anonymous"
+    ></script>
+
+    <!--CSS File-->
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Stick+No+Bills&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+      section {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+        flex-direction: column;
+        background: radial-gradient(rgb(19, 30, 37) 24.5%, rgb(19, 30, 37) 66%);
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        color: white;
+      }
+      body {
+        overflow-x: hidden;
+      }
+      #loginBtn {
+        width: 10%;
+        height: 4vh;
+        border: 1px solid red;
+        background-color: transparent;
+        color: white;
+        font-weight: 500;
+        letter-spacing: 2px;
+        font-size: 18px;
+        padding: 0px;
+        box-shadow: 1px 2px 10px 2px rgba(255, 0, 0, 0.556);
+        font-family: Pacifico;
+      }
+      #loginBtn:hover {
+        background-color: red;
+        transition: 0.8s;
+      }
+      #contactIcon {
+        background-color: transparent;
+        padding: 5px;
+        font-weight: bold;
+        width: 42px;
+        height: 42px;
+        border-radius: 32px;
+        cursor: pointer;
+        border: 6px solid rgb(255, 166, 0);
+        box-shadow: 1px 1px 3px 1px rgba(255, 166, 0, 0.511);
+      }
+      #contactIcon:hover {
+        background-color: rgb(255, 166, 0);
+        transition: 0.8s;
+      }
+      #adminOptions {
+        display: none;
+        margin-top: 65px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      #adminOptions li:hover {
+        background-color: rgb(218, 142, 0);
+        color: white;
+        transition: 0.5s;
+      }
+      #adminOptions .text-danger:hover {
+        background-color: rgb(255, 72, 72);
+        color: white !important;
+        transition: 0.5s;
+      }
+
+      .grid {
+        width: 100%;
+        display: grid;
+        grid-gap: 1%;
+        grid-template-columns: 30% 30% 30%;
+      }
+      .editOptBtns {
+        width: 6%;
+        height: 5vh;
+        font-size: 1vw;
+        font-family: pacifico;
+        border-radius: 32px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        box-shadow: 1px 1px 10px 2px black;
+        margin: 5px;
+        margin-top: 35px;
+      }
+      .playerContainer {
+        width: 100%;
+        height: 55vh;
+        background: whitesmoke;
+        margin-top: 15px;
+        border-radius: 32px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      .grid {
+        width: 100%;
+        height: auto;
+        display: grid;
+        grid-template-columns: 31% 31% 31%;
+        grid-gap: 2%;
+      }
+      .player {
+        width: 100%;
+        height: 8vh;
+        margin-left: 16px;
+        margin-top: 15px;
+        background-color: rgba(0, 113, 212, 0.855);
+        border-radius: 32px;
+        box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.565);
+        letter-spacing: 2px;
+        word-spacing: 2px;
+        font-family: pacifico;
+        display: flex;
+      }
+      .player:hover{
+        background-color: rgb(0, 113, 212);
+        letter-spacing: 3px;
+        transition: .5s;
+      }
+      .playerContainer::-webkit-scrollbar {
+        display: none;
+      }
+
+      .playerContainer {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .flex1{
+        width: 100%;
+        display: grid;
+        grid-template-columns: 70% 30%;
+      }
+      .flex1 form input{
+        width: 70%;
+        height: 6vh;
+        border-radius: 32px;
+        padding: 15px;
+        border: 3px solid orange;
+        box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.689);
+        margin-right: 5px;
+        color: black;
+        font-family: pacifico;
+        letter-spacing: 2px;
+        font-size: 1.4vw;
+      }
+      .flex1 form button{
+        width: 20%;
+        height: 5vh;
+        border: 2px white;
+        background-color: rgb(0, 197, 0);
+        border-radius: 32px;
+        color: white;
+        font-family: pacifico;
+        box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.689);
+        font-weight: 900;
+        font-size: 1.4vw;
+        
+
+      }
+      .flex1 form button:hover{
+        background-color: rgb(0, 150, 0);
+        transition: .8s;
+      }
+       .editOptBtns {
+        width: 6%;
+        height: 5vh;
+        font-size: 1vw;
+        font-family: pacifico;
+        border-radius: 32px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        box-shadow: 1px 1px 10px 2px black;
+        margin: 5px;
+      }
+      .block{
+        position: absolute;
+        width: 27%;
+        height: 8vh;
+        background-color: transparent;
+      }
+    </style>
+
+    <title>Admin</title>
+  </head>
+  <body>
+    <section id="home">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <p
+            class="h2 text-white mx-3"
+            style="font-family: Pacifico; font-weight: 300"
+          >
+            <span style="color: rgba(255, 166, 0, 0.819)">Sports</span>
+            Scheduler
+          </p>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#"></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link disabled"></a>
+              </li>
+            </ul>
+            <p
+              class="m-2 mx-3 h4"
+              style="font-family: pacifico; color: rgba(255, 166, 0, 0.819)"
+            >
+              Hello <span style="color: rgb(255, 255, 255)" id="playerName">Harish</span>
+            </p>
+
+            <svg
+              id="contactIcon"
+              onclick="ShowAdminOptions()"
+              xmlns="http://www.w3.org/2000/svg"
+              width="36"
+              height="36"
+              fill="currentColor"
+              class="bi bi-person"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"
+              />
+            </svg>
+
+            <script>
+              function ShowAdminOptions() {
+                const element = document.getElementById("adminOptions");
+                if (element.style.display == "block") {
+                  element.style.display = "none";
+                } else {
+                  element.style.display = "block";
+                }
+              }
+            </script>
+          </div>
+        </div>
+      </nav>
+      <hr class="m-0" style="border: 2px solid rgb(59, 57, 57)" />
+      <ul
+        class="list-group"
+        id="adminOptions"
+        style="position: absolute; left: 90%"
+      >
+        <li class="list-group-item">View Reports</li>
+        <li class="list-group-item text-danger" onclick="window.location.href='/'">Sign out</li>
+      </ul>
+      <button
+        class="btn btn-danger backButton"
+        style="
+          width: 8%;
+          margin: 15px;
+          border-radius: 32px;
+          box-shadow: 1px 1px 10px 1px rgba(255, 0, 0, 0.608);
+          font-weight: 700;
+          font-family: pacifico;
+          letter-spacing: 2px;
+          font-size: 1.3vw;
+        "
+        onclick=""
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="26"
+          fill="currentColor"
+          class="bi bi-arrow-left"
+          viewBox="0 0 16 16"
+          style="margin: 4px"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+          />
+        </svg>
+        Back
+      </button>
+      <script>
+        const BackToSportDetail= document.querySelectorAll("button.backButton");
+        BackToSportDetail.forEach((anchor) => {
+          anchor.addEventListener("click", function (event) {
+            event.preventDefault();
+            const text = document.querySelector("span.nameOfSport").innerText;
+            const url =
+              "/Sports/n/" +
+              encodeURIComponent(text);
+            this.setAttribute("onclick", `window.location.href='${url}'`);
+            window.location.href = url;
+          });
+        });
+      </script>
+      <% if(UserId == getSessionDetail.userId){%>
+      <div class="flex" style="display: flex; width: 100%; flex-direction: row">
+        <h1 class="mx-5" style="color: white; font-family: pacifico">
+            <span class="nameOfSport"><%= sessionSportName%></span> <span style="color: rgb(175, 170, 170)">Session #</span><span class="idOfSession" style="color: rgb(175, 170, 170)"><%= sessionSportId%></span>
+          </h1>
+        <a class="btn btn-primary editOptBtns my-2" href=''>Edit</a>
+        <button class="btn btn-danger editOptBtns my-2 deleteSession" onclick="">Delete</button>
+        <a class="btn btn-success editOptBtns my-2" href="" class="joinedSession">Join</a>
+        <script>
+          const deleteFullSession= document.querySelectorAll("button.deleteSession");
+          deleteFullSession.forEach((anchor) => {
+            anchor.addEventListener("click", function (event) {
+              event.preventDefault();
+              const text = document.querySelector("span.nameOfSport").innerText;
+              const sessionId = document.querySelector("span.idOfSession").innerText
+              const url =
+                "/Sports/" +
+                encodeURIComponent(text) +
+                "/deleteSession/" + 
+                encodeURIComponent(sessionId);
+              this.setAttribute("onclick", `window.location.href='${url}'`);
+              window.location.href = url;
+            });
+          });
+        </script>
+      </div>
+      <script>
+        const joinSession = document.querySelectorAll("a.joinedSession");
+        joinSession.forEach((anchor) => {
+          anchor.addEventListener("click", function (event) {
+            event.preventDefault();
+            const text = this.innerText;
+            window.alert(text)
+            const url = "/delete/" + encodeURIComponent(text);
+            this.setAttribute("href", url);
+            window.location.href = url; 
+    });
+  });
+      </script>
+     
+      <!-- <p
+        class="h3 mx-5"
+        style="
+          color: rgb(236, 236, 236);
+          font-family: pacifico;
+          letter-spacing: 2px;
+        "
+      >
+        This session is scheduled for
+        <span style="color: orange">01/04/2023 4:30PM</span>, to be played at
+        <span style="color: orange">Dubai kurukusandhu</span> -->
+      <p
+        class="mx-5 h4"
+        style="color: orange; font-family: pacifico; font-weight: 100"
+      >
+        Date &#10240;:
+        <span style="font-family: 'Stick No Bills', sans-serif"
+          ><%= getSessionDetail.session %></span
+        >
+      </p>
+      <p
+        class="mx-5 h4"
+        style="color: orange; font-family: pacifico; font-weight: 100"
+      >
+        Place &nbsp;: <span><%= getSessionDetail.Address %></span>
+      </p>
+      <div class="container playerContainer">
+        <div class="flex1">
+        <h2 class="text-dark m-3 my-4" style="font-family: pacifico">
+          Players <span id="num" style=" color: rgb(47, 147, 0); font-weight: bold; font-family: 'Stick No Bills', sans-serif"><%= getPlayersCount %></span><span style="color: gray; font-weight: 100;">/</span><span id="limit" style=" color: rgb(47, 147, 0); font-weight: bold; font-family: 'Stick No Bills', sans-serif"><%= getSessionDetail.countOfPlayers%></span>
+        </h2>
+        
+        <form style="float: right;" id="addPlayerForm" action="" method="post" class="my-4 form1">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <input type="text" name="playerNames" id="" placeholder="Add players">
+            <button type="submit">Add</button>
+        </form>
+        <script>
+          if(document.getElementById("num").innerText == document.getElementById("limit").innerText) {
+            document.getElementById("addPlayerForm").style.display = "none"
+          }
+          else{
+            document.getElementById("addPlayerForm").style.display = "block"
+          }
+        </script>
+    </div>
+        <div class="grid">
+          <% getPlayers.forEach(function(player) { %>
+          <div class="player">
+            <div class="block" style="color: transparent;" onclick=""><%= player.id %></div>
+            <p class="h3 m-2"><%= player.playerNames %></p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="rgb(255, 0, 0,  0.8)"
+              class="bi bi-trash-fill"
+              viewBox="0 0 16 16"
+              style="
+                margin-left: 200px;
+                margin-top: 15px;
+                color: rgba(255, 0, 0, 0.798);
+              "
+            >
+              <path
+                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+              />
+            </svg>
+          </div> 
+           <% }); %>
+           <script>
+            const sessionPage = document.querySelectorAll("div.block");
+            sessionPage.forEach((anchor) => {
+              anchor.addEventListener("click", function (event) {
+                event.preventDefault();
+                const text = document.querySelector("span.nameOfSport").innerText;
+                const id = this.innerText;
+                const sessionId = document.querySelector("span.idOfSession").innerText
+                const url =
+                  "/Sports/" +
+                  encodeURIComponent(text) +
+                  "/sessionDetail/" + "delete/" +
+                  encodeURIComponent(id) + "/sessionid/" + encodeURIComponent(sessionId);
+                this.setAttribute("onclick", `window.location.href='${url}'`);
+                window.location.href = url;
+              });
+            });
+          </script>
+      </div>
+      <% }%>
+      <% if(UserId != getSessionDetail.userId){%>
+        <div class="flex" style="display: flex; width: 100%; flex-direction: row">
+          <h1 class="mx-5" style="color: white; font-family: pacifico">
+              <span class="nameOfSport"><%= sessionSportName%></span> <span style="color: rgb(175, 170, 170)">Session #</span><span class="idOfSession" style="color: rgb(175, 170, 170)"><%= sessionSportId%></span>
+            </h1>
+          <a class="btn btn-success editOptBtns my-2" href="" class="joinedSession">Join</a>
+
+        </div>
+        <script>
+          const joinSession2 = document.querySelectorAll("a.joinedSession");
+          joinSession2.forEach((anchor) => {
+            anchor.addEventListener("click", function (event) {
+              event.preventDefault();
+              const text = this.innerText;
+              window.alert(text)
+              const url = "/delete/" + encodeURIComponent(text);
+              this.setAttribute("href", url);
+              window.location.href = url; 
+      });
+    });
+        </script>
+       
+        <!-- <p
+          class="h3 mx-5"
+          style="
+            color: rgb(236, 236, 236);
+            font-family: pacifico;
+            letter-spacing: 2px;
+          "
+        >
+          This session is scheduled for
+          <span style="color: orange">01/04/2023 4:30PM</span>, to be played at
+          <span style="color: orange">Dubai kurukusandhu</span> -->
+        <p
+          class="mx-5 h4"
+          style="color: orange; font-family: pacifico; font-weight: 100"
+        >
+          Date &#10240;:
+          <span style="font-family: 'Stick No Bills', sans-serif"
+            ><%= getSessionDetail.session %></span
+          >
+        </p>
+        <p
+          class="mx-5 h4"
+          style="color: orange; font-family: pacifico; font-weight: 100"
+        >
+          Place &nbsp;: <span><%= getSessionDetail.Address %></span>
+        </p>
+        <div class="container playerContainer">
+          <div class="flex1">
+          <h2 class="text-dark m-3 my-4" style="font-family: pacifico">
+            Players <span id="num" style=" color: rgb(47, 147, 0); font-weight: bold; font-family: 'Stick No Bills', sans-serif"><%= getPlayersCount %></span><span style="color: gray; font-weight: 100;">/</span><span id="limit" style=" color: rgb(47, 147, 0); font-weight: bold; font-family: 'Stick No Bills', sans-serif"><%= getSessionDetail.countOfPlayers%></span>
+          </h2>
+      </div>
+          <div class="grid">
+            <% getPlayers.forEach(function(player) { %>
+            <div class="player">
+              <div class="block" style="color: transparent;" onclick=""><%= player.id %></div>
+              <p class="h3 m-2"><%= player.playerNames %></p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                fill="rgb(255, 0, 0,  0.8)"
+                class="bi bi-trash-fill"
+                viewBox="0 0 16 16"
+                style="
+                  margin-left: 200px;
+                  margin-top: 15px;
+                  color: rgba(255, 0, 0, 0.798);
+                "
+              >
+                <path
+                  d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+                />
+              </svg>
+            </div> 
+             <% }); %>
+             <script>
+              const sessionPage2 = document.querySelectorAll("div.block");
+              sessionPage2.forEach((anchor) => {
+                anchor.addEventListener("click", function (event) {
+                  event.preventDefault();
+                  const text = document.querySelector("span.nameOfSport").innerText;
+                  const id = this.innerText;
+                  const sessionId = document.querySelector("span.idOfSession").innerText
+                  const url =
+                    "/Sports/" +
+                    encodeURIComponent(text) +
+                    "/sessionDetail/" + "delete/" +
+                    encodeURIComponent(id) + "/sessionid/" + encodeURIComponent(sessionId);
+                  this.setAttribute("onclick", `window.location.href='${url}'`);
+                  window.location.href = url;
+                });
+              });
+            </script>
+        </div>
+        <% }%>
+    </section>
+  </body>
+</html>

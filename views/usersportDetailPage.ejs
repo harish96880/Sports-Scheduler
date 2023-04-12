@@ -194,7 +194,12 @@
               class="m-2 mx-3 h4"
               style="font-family: pacifico; color: rgba(255, 166, 0, 0.819)"
             >
-              Hello <span style="color: rgb(255, 255, 255)">Harish</span>
+              Hello
+              <span style="color: rgb(255, 255, 255)">
+                <%= getUserName.firstName %></span
+              ><span class="userId" style="color: transparent"
+                ><%= UserId %></span
+              >
             </p>
 
             <svg
@@ -251,7 +256,7 @@
           letter-spacing: 2px;
           font-size: 1.3vw;
         "
-        onclick="window.location.href='/admin'"
+        onclick="window.location.href='/userHomePage'"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -358,7 +363,7 @@
               const url =
                 "/Sports/" +
                 encodeURIComponent(text) +
-                "/sessionDetail/" +
+                "/sessionDetail/n/" +
                 encodeURIComponent(id);
               this.setAttribute("onclick", `window.location.href='${url}'`);
               window.location.href = url;
@@ -526,10 +531,19 @@
               type="hidden"
               class="loginInput p-3"
               placeholder="who all are participating"
+              name="userId"
+              id=""
+              value="<%= UserId%>"
+              required
+            />
+            <input
+              type="hidden"
+              class="loginInput p-3"
+              placeholder="who all are participating"
               name="players"
               id=""
               required
-            /><br />
+            />
             <input
               type="number"
               placeholder="how many players do you need"

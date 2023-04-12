@@ -212,7 +212,10 @@
               class="m-2 mx-3 h4"
               style="font-family: pacifico; color: rgba(255, 166, 0, 0.819)"
             >
-              Hello <span style="color: rgb(255, 255, 255)">Harish</span>
+              Hello <span style="color: rgb(255, 255, 255)">Harish</span
+              ><span class="userId" style="color: transparent"
+                ><%= UserId %></span
+              >
             </p>
 
             <svg
@@ -549,6 +552,15 @@
               class="loginInput p-3"
               required
             />
+            <input
+              type="hidden"
+              class="loginInput p-3"
+              placeholder="who all are participating"
+              name="userId"
+              id=""
+              value="<%= UserId%>"
+              required
+            /><br />
             <input
               type="hidden"
               class="loginInput p-3"

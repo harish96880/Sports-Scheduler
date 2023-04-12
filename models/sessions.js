@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   sessions.init(
     {
+      userId: DataTypes.INTEGER,
       sportname: DataTypes.STRING,
       session: DataTypes.DATEONLY,
       time: DataTypes.STRING,
