@@ -373,7 +373,7 @@
                 padding-left: 90px;
                 font-size: 24px;
               "
-              ><%= user.countOfPlayers%> slots</span
+              ><%= user.availablePlayers %> slots</span
             >
           </p>
         </div>
@@ -568,7 +568,7 @@
               name="players"
               id=""
               required
-            /><br />
+            />
             <input
               type="number"
               placeholder="how many players do you need"
@@ -653,9 +653,10 @@
           <center>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <input
-              type="text"
+              type="hidden"
               name="Check_Sports_Name"
               placeholder="Enter existing name"
+              value="<%= name%>"
               id=""
               class="loginInput p-3"
               required

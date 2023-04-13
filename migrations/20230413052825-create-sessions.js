@@ -18,13 +18,13 @@ module.exports = {
       session: {
         type: Sequelize.DATEONLY
       },
-      time: {
-        type: Sequelize.STRING
-      },
       Address: {
         type: Sequelize.STRING
       },
       countOfPlayers: {
+        type: Sequelize.INTEGER
+      },
+      availablePlayers: {
         type: Sequelize.INTEGER
       },
       createdAt: {

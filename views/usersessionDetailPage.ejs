@@ -244,7 +244,7 @@
               class="m-2 mx-3 h4"
               style="font-family: pacifico; color: rgba(255, 166, 0, 0.819)"
             >
-              Hello <span style="color: rgb(255, 255, 255)" id="playerName">Harish</span>
+              Hello <span style="color: rgb(255, 255, 255)" id="playerName"><%= getUserName.firstName %></span>
             </p>
 
             <svg
@@ -346,7 +346,7 @@
               const url =
                 "/Sports/" +
                 encodeURIComponent(text) +
-                "/deleteSession/" + 
+                "/deleteSession/n/" + 
                 encodeURIComponent(sessionId);
               this.setAttribute("onclick", `window.location.href='${url}'`);
               window.location.href = url;
@@ -402,6 +402,7 @@
         
         <form style="float: right;" id="addPlayerForm" action="" method="post" class="my-4 form1">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <input type="hidden" name="availablePlayersCount" value="<%= (getSessionDetail.countOfPlayers - getPlayersCount) - 1%>" />
             <input type="text" name="playerNames" id="" placeholder="Add players">
             <button type="submit">Add</button>
         </form>
@@ -450,7 +451,7 @@
                   "/Sports/" +
                   encodeURIComponent(text) +
                   "/sessionDetail/" + "delete/" +
-                  encodeURIComponent(id) + "/sessionid/" + encodeURIComponent(sessionId);
+                  encodeURIComponent(id) + "/sessionid/n/" + encodeURIComponent(sessionId);
                 this.setAttribute("onclick", `window.location.href='${url}'`);
                 window.location.href = url;
               });
@@ -517,43 +518,10 @@
             <div class="player">
               <div class="block" style="color: transparent;" onclick=""><%= player.id %></div>
               <p class="h3 m-2"><%= player.playerNames %></p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="rgb(255, 0, 0,  0.8)"
-                class="bi bi-trash-fill"
-                viewBox="0 0 16 16"
-                style="
-                  margin-left: 200px;
-                  margin-top: 15px;
-                  color: rgba(255, 0, 0, 0.798);
-                "
-              >
-                <path
-                  d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
-                />
-              </svg>
+              
             </div> 
              <% }); %>
-             <script>
-              const sessionPage2 = document.querySelectorAll("div.block");
-              sessionPage2.forEach((anchor) => {
-                anchor.addEventListener("click", function (event) {
-                  event.preventDefault();
-                  const text = document.querySelector("span.nameOfSport").innerText;
-                  const id = this.innerText;
-                  const sessionId = document.querySelector("span.idOfSession").innerText
-                  const url =
-                    "/Sports/" +
-                    encodeURIComponent(text) +
-                    "/sessionDetail/" + "delete/" +
-                    encodeURIComponent(id) + "/sessionid/" + encodeURIComponent(sessionId);
-                  this.setAttribute("onclick", `window.location.href='${url}'`);
-                  window.location.href = url;
-                });
-              });
-            </script>
+             
         </div>
         <% }%>
     </section>

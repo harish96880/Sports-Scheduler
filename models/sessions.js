@@ -24,9 +24,9 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       sportname: DataTypes.STRING,
       session: DataTypes.DATEONLY,
-      time: DataTypes.STRING,
       Address: DataTypes.STRING,
       countOfPlayers: DataTypes.INTEGER,
+      availablePlayers: DataTypes.INTEGER,
     },
     {
       sequelize,

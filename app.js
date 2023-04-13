@@ -155,7 +155,7 @@ app.post("/users", async (request, response) => {
       if (err) {
         console.log(error);
       }
-      response.redirect("/todos");
+      response.redirect("/userHomePage/n");
     });
   } catch (error) {
     console.log(error);
@@ -262,6 +262,27 @@ app.delete(
 
 //***************************************Sports Scheduler*********************************************
 app.post(
+  "/updateSession",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const updateSession = await sessions.update(
+      {
+        session: request.body.session,
+        time: request.body.time,
+        Address: request.body.Address,
+        countOfPlayers: request.body.numberOfPlayers,
+      },
+      {
+        where: {
+          id: request.body.userId,
+        },
+      }
+    );
+    return response.redirect(`/admin`);
+  }
+);
+
+app.post(
   "/updateSport",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
@@ -293,11 +314,13 @@ app.get(
   async (request, response) => {
     const deleteSessionId = request.params.id;
     const nameofSport = request.params.name;
+
     const deletePlayer = await sessions.destroy({
       where: {
         id: deleteSessionId,
       },
     });
+
     return response.redirect(`/Sports/${nameofSport}`);
   }
 );
@@ -314,8 +337,78 @@ app.get(
         id: deletePlayerId,
       },
     });
+    const countOfPlayers = await players.count({
+      where: {
+        sessionId: sessionId,
+      },
+    });
+    const totalPlayers = await sessions.findOne({
+      where: {
+        id: sessionId,
+      },
+    });
+    const updateAvailablePlayer = await sessions.update(
+      {
+        availablePlayers: totalPlayers.countOfPlayers - countOfPlayers,
+      },
+      {
+        where: {
+          id: sessionId,
+        },
+      }
+    );
+    // console.log("====================================");
+    // console.log(`Count of Players: ${countOfPlayers}`);
+    // console.log("====================================");
+    // console.log("====================================");
+    // console.log(totalPlayers);
+    // console.log("====================================");
     return response.redirect(
       `/Sports/${nameofSport}/sessionDetail/${sessionId}`
+    );
+  }
+);
+
+app.get(
+  "/Sports/:name/sessionDetail/delete/:id/sessionid/n/:sessionid",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const deletePlayerId = request.params.id;
+    const nameofSport = request.params.name;
+    const sessionId = request.params.sessionid;
+    const deletePlayer = await players.destroy({
+      where: {
+        id: deletePlayerId,
+      },
+    });
+    const countOfPlayers = await players.count({
+      where: {
+        sessionId: sessionId,
+      },
+    });
+    const totalPlayers = await sessions.findOne({
+      where: {
+        id: sessionId,
+      },
+    });
+    const updateAvailablePlayer = await sessions.update(
+      {
+        availablePlayers: totalPlayers.countOfPlayers - countOfPlayers,
+      },
+      {
+        where: {
+          id: sessionId,
+        },
+      }
+    );
+    // console.log("====================================");
+    // console.log(`Count of Players: ${countOfPlayers}`);
+    // console.log("====================================");
+    // console.log("====================================");
+    // console.log(totalPlayers);
+    // console.log("====================================");
+    return response.redirect(
+      `/Sports/${nameofSport}/sessionDetail/n/${sessionId}`
     );
   }
 );
@@ -332,7 +425,43 @@ app.post(
       sportmatch: sportName,
       sessionId: sportId,
     });
+    const updateSessionPlayerCount = await sessions.update(
+      {
+        availablePlayers: request.body.availablePlayersCount,
+      },
+      {
+        where: {
+          id: sportId,
+        },
+      }
+    );
     return response.redirect(`/Sports/${sportName}/sessionDetail/${sportId}`);
+  }
+);
+
+app.post(
+  "/Sports/:name/sessionDetail/n/:id",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const sportName = request.params.name;
+    const sportId = request.params.id;
+    const playerName = request.body.playerNames;
+    const create = await players.create({
+      playerNames: playerName,
+      sportmatch: sportName,
+      sessionId: sportId,
+    });
+    const updateSessionPlayerCount = await sessions.update(
+      {
+        availablePlayers: request.body.availablePlayersCount,
+      },
+      {
+        where: {
+          id: sportId,
+        },
+      }
+    );
+    return response.redirect(`/Sports/${sportName}/sessionDetail/n/${sportId}`);
   }
 );
 
@@ -397,6 +526,11 @@ app.get(
         sportmatch: sessionSportName,
       },
     });
+    const getUserName = await User.findOne({
+      where: {
+        id: request.user.id,
+      },
+    });
     console.log("====================================");
     console.log(request.user.id);
     console.log("====================================");
@@ -408,6 +542,7 @@ app.get(
       getPlayers,
       getPlayersCount,
       UserId,
+      getUserName,
     });
   }
 );
@@ -454,6 +589,11 @@ app.get(
     const SportsName = request.params.name;
     const getSportName = await sessions.getSport(SportsName);
     const getDate = new Date().toISOString();
+    const playersCount = await players.findAll({
+      where: {
+        sportmatch: request.params.name,
+      },
+    });
     const UserId = request.user.id;
     console.log("====================================");
     console.log(request.user.id);
@@ -471,6 +611,7 @@ app.get(
       getSportName,
       getDate,
       UserId,
+      playersCount,
     });
   }
 );
@@ -515,6 +656,7 @@ app.post("/Sports/:name", async (request, response) => {
   const time = request.body.time;
   const address = request.body.Address;
   const playersCount = request.body.numberOfPlayers;
+  const availablePlayers = request.body.numberOfPlayers;
   const userId = request.body.userId;
   try {
     const inputData = await sessions.create({
@@ -524,6 +666,7 @@ app.post("/Sports/:name", async (request, response) => {
       Address: address,
       countOfPlayers: playersCount,
       userId: userId,
+      availablePlayers: availablePlayers,
     });
     const PlayersName = await players.create({
       playerNames: request.body.players,
@@ -545,6 +688,7 @@ app.post("/Sports/n/:name", async (request, response) => {
   const time = request.body.time;
   const address = request.body.Address;
   const playersCount = request.body.numberOfPlayers;
+  const availablePlayers = request.body.numberOfPlayers;
   const userId = request.body.userId;
   try {
     const inputData = await sessions.create({
@@ -554,6 +698,7 @@ app.post("/Sports/n/:name", async (request, response) => {
       Address: address,
       countOfPlayers: playersCount,
       userId: userId,
+      availablePlayers: availablePlayers,
     });
     const PlayersName = await players.create({
       playerNames: request.body.players,
