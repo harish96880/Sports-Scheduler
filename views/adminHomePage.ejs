@@ -117,7 +117,7 @@
         letter-spacing: 3px;
         font-weight: bold;
         font-size: 1.3vw;
-        font-family: pacifico;
+        font-family: sans-serif;
         padding: 10px;
         box-shadow: 1px 1px 2px 1px rgba(255, 255, 255, 0.718);
       }
@@ -130,7 +130,7 @@
         height: 5vh;
         border-radius: 32px;
         font-size: 1.3vw;
-        font-family: pacifico;
+        font-family: sans-serif;
         background-color: transparent;
         border: 3px solid rgba(255, 166, 0, 0.819);
         margin-left: 10px;
@@ -596,7 +596,7 @@
         width: 40%;
         border-radius: 32px;
         box-shadow: 1px 1px 14px 1px black;
-        font-family: pacifico;
+        font-family: sans-serif;
         font-weight: 400;
       }
       .sportsButtons button:hover{
@@ -715,11 +715,11 @@
         
         <div class="row">
             <div class="col-lg-8">
-                <h1 style="font-family: pacifico; color: rgba(255, 166, 0, 0.819); font-size: 3.5vw;">Create Sport</h1>
-                <p class="h4 w-75 my-4" style="color: rgb(196, 196, 196); font-family: pacifico;">Enter the sports name you want to add which will display to all other users</p>
+                <h1 style="font-family: sans-serif; color: rgb(255, 166, 0); font-size: 3.5vw;">Create Sport</h1>
+                <p class="h4 w-75 my-4" style="color: rgb(196, 196, 196); font-family: sans-serif;">Enter the sports name you want to add which will display to all other users</p>
                 <form action="/newsport" method="post">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                <input type="text" name="Sports_Name" id="createSport" placeholder="Create sport" required>
+                <input type="text" name="Sports_Name" id="createSport" placeholder="Enter New Sport" required>
                 <button type="submit" class="btn" id="createBtn">Create</button>
                 </form>
             </div>
@@ -729,17 +729,18 @@
         </div>
     </section>
     <section>
-      <h1 class="m-5" style="font-family: pacifico; color: rgba(255, 166, 0, 0.819); font-size: 3.5vw;">Available <span style="color:rgba(255, 255, 255, 0.772)">Sports</span></h1>
+      <h1 class="m-5" style="font-family: sans-serif; color: rgba(255, 166, 0, 0.819); font-size: 3.5vw;">Available <span style="color:rgba(255, 255, 255, 0.772)">Sports</span></h1>
       <div class="grid">
         <% sportsItems.forEach(function(user) { %>
         <div class="card">
           
-          <h1 style="color: transparent; font-family: pacifico;" class="getSportId" ><%= user.id %></h1>
-            <h1 style="color: rgba(255, 255, 255, 0.819); font-family: pacifico;" class="getSportId" id="getNameOfSport" onclick="window.location.href='/SportDetail'"><%= user.Sports_Name %></h1>
+          <h1 style="color: transparent; font-family: sans-serif;"><%= user.id %></h1>
+            <h1 style="color: rgba(255, 255, 255, 0.819); font-family: sans-serif;" class="getSportId" id="getNameOfSport" onclick="window.location.href='/SportDetail'"><%= user.Sports_Name %></h1>
             <div class="row">
               <div class="col-lg-12 my-5 sportsButtonsDiv">
-                
-                <a class="sportsButtons btn btn-danger deleteSport" href = ''><%= user.id %></a>
+                <a class="sportsButtons btn btn-danger deleteSport" href = '' style="color: transparent; padding-left: 22px;"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                  <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                </svg><%= user.id %></a>
               </div>
             </div>
         </div>

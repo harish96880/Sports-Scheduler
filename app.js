@@ -3,7 +3,6 @@ const app = express();
 const { Todo, User, Sports, sessions, players } = require("./models");
 const bodyParser = require("body-parser");
 const path = require("path");
-const { Model, Op } = require("sequelize");
 const passport = require("passport");
 const connectEnsureLogin = require("connect-ensure-login");
 const session = require("express-session");
@@ -12,10 +11,7 @@ var csurf = require("tiny-csrf");
 var cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const flash = require("connect-flash");
-const user = require("./models/user");
-const fs = require("fs");
 const { log } = require("console");
-const { Session } = require("inspector");
 
 const saltRounds = 10;
 
@@ -102,7 +98,6 @@ app.get(
     const duetodayTodoItems = await Todo.duetodayTodo(loggedInUser);
     const duelaterTodoItems = await Todo.duelaterTodo(loggedInUser);
     const completedTodoItems = await Todo.markAsCompletedItems(loggedInUser);
-    // const getUserName = await User.getName(loggedInUser);
     if (request.accepts("html")) {
       response.render("todo", {
         title: "Harish Todo-Manager",
@@ -117,13 +112,6 @@ app.get(
     }
   }
 );
-
-// app.get("/signup", (request, response) => {
-//   response.render("signup", {
-//     title: "Signup",
-//     "csrfToken": request.csrfToken(), //prettier-ignore
-//   });
-// });
 
 app.get("/login", (request, response) => {
   response.render("index", {
@@ -163,15 +151,12 @@ app.post("/users", async (request, response) => {
 });
 
 app.use(express.static(path.join(__dirname, "public")));
+
 app.use(express.static(path.join(__dirname, "images")));
 
 app.get("/todos", async function (_request, response) {
   console.log("Processing list of all Todos ...");
-  // FILL IN YOUR CODE HERE
 
-  // First, we have to query our PostgerSQL database using Sequelize to get list of all Todos.
-  // Then, we have to respond with all Todos, like:
-  // response.send(todos)
   try {
     const todo = await Todo.getTodo();
     return response.json(todo);
@@ -260,7 +245,125 @@ app.delete(
   }
 );
 
-//***************************************Sports Scheduler*********************************************
+//***************************************Sports Scheduler*********************************************************************************
+app.get(
+  "/join/n/:sportname/:sessionId",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const getPlayerName = await User.findOne({
+      where: {
+        id: request.user.id,
+      },
+    });
+    console.log("====================================");
+    console.log(getPlayerName.firstName);
+    console.log("====================================");
+    const totalPlayers = await sessions.findOne({
+      where: {
+        id: request.params.sessionId,
+      },
+    });
+    const num = 1;
+    const countOfPlayers = await players.count({
+      where: {
+        sessionId: request.params.sessionId,
+      },
+    });
+    const existingPlayer = await players.findOne({
+      where: {
+        playerAccessId: request.user.id,
+        sportmatch: request.params.sportname,
+        sessionId: request.params.sessionId,
+      },
+    });
+    if (existingPlayer) {
+      request.flash("error", "Already joined");
+      return response.redirect(
+        `/Sports/${request.params.sportname}/SessionDetail/n/${request.params.sessionId}`
+      );
+    } else {
+      const joinPlayer = await players.create({
+        playerNames: getPlayerName.firstName,
+        sessionId: request.params.sessionId,
+        sportmatch: request.params.sportname,
+        playerAccessId: request.user.id,
+      });
+    }
+    const updateAvailablePlayer = await sessions.update(
+      {
+        availablePlayers: totalPlayers.countOfPlayers - (countOfPlayers + num),
+      },
+      {
+        where: {
+          id: request.params.sessionId,
+        },
+      }
+    );
+    return response.redirect(
+      `/Sports/${request.params.sportname}/SessionDetail/n/${request.params.sessionId}`
+    );
+  }
+);
+
+app.get(
+  "/join/:sportname/:sessionId",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const getPlayerName = await User.findOne({
+      where: {
+        id: request.user.id,
+      },
+    });
+    console.log("====================================");
+    console.log(getPlayerName.firstName);
+    console.log("====================================");
+    const totalPlayers = await sessions.findOne({
+      where: {
+        id: request.params.sessionId,
+      },
+    });
+    const num = 1;
+    const countOfPlayers = await players.count({
+      where: {
+        sessionId: request.params.sessionId,
+      },
+    });
+    const existingPlayer = await players.findOne({
+      where: {
+        playerAccessId: request.user.id,
+        sportmatch: request.params.sportname,
+        sessionId: request.params.sessionId,
+      },
+    });
+    if (existingPlayer) {
+      request.flash("error", "Already joined");
+      return response.redirect(
+        `/Sports/${request.params.sportname}/SessionDetail/${request.params.sessionId}`
+      );
+    } else {
+      const joinPlayer = await players.create({
+        playerNames: getPlayerName.firstName,
+        sessionId: request.params.sessionId,
+        sportmatch: request.params.sportname,
+        playerAccessId: request.user.id,
+      });
+    }
+    const updateAvailablePlayer = await sessions.update(
+      {
+        availablePlayers: totalPlayers.countOfPlayers - (countOfPlayers + num),
+      },
+      {
+        where: {
+          id: request.params.sessionId,
+        },
+      }
+    );
+    return response.redirect(
+      `/Sports/${request.params.sportname}/SessionDetail/${request.params.sessionId}`
+    );
+  }
+);
+
 app.post(
   "/updateSession",
   connectEnsureLogin.ensureLoggedIn(),
@@ -318,6 +421,12 @@ app.get(
     const deletePlayer = await sessions.destroy({
       where: {
         id: deleteSessionId,
+      },
+    });
+
+    await players.destroy({
+      where: {
+        playerAccessId: request.user.id,
       },
     });
 
@@ -469,6 +578,7 @@ app.get(
   "/Sports/:name/sessionDetail/:id",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
+    const userId = request.user.id;
     const sessionSportName = request.params.name;
     const sessionSportId = request.params.id;
     const getSessionDetail = await sessions.findOne({
@@ -482,12 +592,18 @@ app.get(
         sportmatch: sessionSportName,
       },
     });
+    const getUserWithId = await players.findOne({
+      where: {
+        playerAccessId: userId,
+      },
+    });
     const getPlayersCount = await players.count({
       where: {
         sessionId: sessionSportId,
         sportmatch: sessionSportName,
       },
     });
+    const getDate = new Date().toISOString();
     console.log("====================================");
     console.log(request.user.id);
     console.log("====================================");
@@ -498,6 +614,9 @@ app.get(
       getSessionDetail,
       getPlayers,
       getPlayersCount,
+      userId,
+      getUserWithId,
+      getDate,
     });
   }
 );
@@ -520,19 +639,32 @@ app.get(
         sportmatch: sessionSportName,
       },
     });
+
+    const getJoinedPlayer = await players.findOne({
+      where: {
+        playerAccessId: UserId,
+      },
+    });
+
     const getPlayersCount = await players.count({
       where: {
         sessionId: sessionSportId,
         sportmatch: sessionSportName,
       },
     });
+
     const getUserName = await User.findOne({
       where: {
         id: request.user.id,
       },
     });
+    const getUserWithId = await players.findOne({
+      where: {
+        playerAccessId: UserId,
+      },
+    });
     console.log("====================================");
-    console.log(request.user.id);
+    console.log(getUserName.firstName);
     console.log("====================================");
     response.render("usersessionDetailPage", {
       "csrfToken": request.csrfToken(), //prettier-ignore
@@ -543,6 +675,8 @@ app.get(
       getPlayersCount,
       UserId,
       getUserName,
+      getUserWithId,
+      getJoinedPlayer,
     });
   }
 );

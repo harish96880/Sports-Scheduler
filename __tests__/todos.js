@@ -5,6 +5,7 @@ var cheerio = require("cheerio");
 const e = require("express");
 
 let server, agent;
+
 function extractCsrfToken(res) {
   var $ = cheerio.load(res.text);
   return $("[name=_csrf]").val();
@@ -137,28 +138,9 @@ describe("Todo Application", function () {
     expect(parsedUpdateResponse.completed).toBe(false);
   });
 
-  // test("Fetches all todos in the database using /todos endpoint", async () => {
-  //   await agent.post("/todos").send({
-  //     title: "Buy xbox",
-  //     dueDate: new Date().toISOString(),
-  //     completed: false,
-  //   });
-  //   await agent.post("/todos").send({
-  //     title: "Buy ps3",
-  //     dueDate: new Date().toISOString(),
-  //     completed: false,
-  //   });
-  //   const response = await agent.get("/todos");
-  //   const parsedResponse = JSON.parse(response.text);
-
-  //   expect(parsedResponse.length).toBe(4);
-  //   expect(parsedResponse[3]["title"]).toBe("Buy ps3");
-  // });
-
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
     const agent = request.agent(server);
     await login(agent, "user.a@test.com", "12345678");
-    // FILL IN YOUR CODE HERE
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({

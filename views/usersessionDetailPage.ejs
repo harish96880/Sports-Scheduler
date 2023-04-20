@@ -201,6 +201,12 @@
         height: 8vh;
         background-color: transparent;
       }
+      .block2{
+        position: absolute;
+        width: 27%;
+        height: 8vh;
+        background-color: transparent;
+      }
     </style>
 
     <title>Admin</title>
@@ -328,6 +334,11 @@
           });
         });
       </script>
+      <% if(messages && messages.error && messages.error.length > 0)  { %>
+        <% for(var i=0; i<messages.error.length; i++) { %>
+                <p class="alert alert-danger"> <%= messages.error[i] %></p>
+        <% } %>
+      <% } %>
       <% if(UserId == getSessionDetail.userId){%>
       <div class="flex" style="display: flex; width: 100%; flex-direction: row">
         <h1 class="mx-5" style="color: white; font-family: pacifico">
@@ -335,7 +346,7 @@
           </h1>
         <a class="btn btn-primary editOptBtns my-2" href=''>Edit</a>
         <button class="btn btn-danger editOptBtns my-2 deleteSession" onclick="">Delete</button>
-        <a class="btn btn-success editOptBtns my-2" href="" class="joinedSession">Join</a>
+        <a class="btn btn-success editOptBtns joinedSession my-2" href="" >Join</a>    
         <script>
           const deleteFullSession= document.querySelectorAll("button.deleteSession");
           deleteFullSession.forEach((anchor) => {
@@ -355,17 +366,6 @@
         </script>
       </div>
       <script>
-        const joinSession = document.querySelectorAll("a.joinedSession");
-        joinSession.forEach((anchor) => {
-          anchor.addEventListener("click", function (event) {
-            event.preventDefault();
-            const text = this.innerText;
-            window.alert(text)
-            const url = "/delete/" + encodeURIComponent(text);
-            this.setAttribute("href", url);
-            window.location.href = url; 
-    });
-  });
       </script>
      
       <!-- <p
@@ -418,8 +418,9 @@
         <div class="grid">
           <% getPlayers.forEach(function(player) { %>
           <div class="player">
+            <% if(getUserName.firstName == player.playerNames) { %>
             <div class="block" style="color: transparent;" onclick=""><%= player.id %></div>
-            <p class="h3 m-2"><%= player.playerNames %></p>
+            <p class="h3 m-2 playerNames"><%= player.playerNames %></p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="30"
@@ -437,6 +438,11 @@
                 d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
               />
             </svg>
+            <% } %>
+            <% if(getUserName.firstName != player.playerNames) { %>
+              <div class="block2" style="color: transparent;"><%= player.id %></div>
+              <p class="h3 m-2 playerNames"><%= player.playerNames %></p> 
+              <% } %>
           </div> 
            <% }); %>
            <script>
@@ -464,7 +470,7 @@
           <h1 class="mx-5" style="color: white; font-family: pacifico">
               <span class="nameOfSport"><%= sessionSportName%></span> <span style="color: rgb(175, 170, 170)">Session #</span><span class="idOfSession" style="color: rgb(175, 170, 170)"><%= sessionSportId%></span>
             </h1>
-          <a class="btn btn-success editOptBtns my-2" href="" class="joinedSession">Join</a>
+          <a class="btn btn-success editOptBtns joinedSession my-2" href="" >Join</a>
 
         </div>
         <script>
@@ -472,9 +478,9 @@
           joinSession2.forEach((anchor) => {
             anchor.addEventListener("click", function (event) {
               event.preventDefault();
-              const text = this.innerText;
-              window.alert(text)
-              const url = "/delete/" + encodeURIComponent(text);
+              const text = document.querySelector("span.nameOfSport").innerText;
+              const sessionId = document.querySelector("span.idOfSession").innerText
+              const url = "/join/n/" + encodeURIComponent(text) + "/" + encodeURIComponent(sessionId);
               this.setAttribute("href", url);
               window.location.href = url; 
       });
@@ -514,16 +520,57 @@
           </h2>
       </div>
           <div class="grid">
+            
             <% getPlayers.forEach(function(player) { %>
             <div class="player">
-              <div class="block" style="color: transparent;" onclick=""><%= player.id %></div>
-              <p class="h3 m-2"><%= player.playerNames %></p>
-              
-            </div> 
-             <% }); %>
-             
+              <% if(getUserName.firstName == player.playerNames) { %>
+            <div class="block" style="color: transparent;" onclick=""><%= player.id %></div>
+            <p class="h3 m-2 playerNames"><%= player.playerNames %></p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="rgb(255, 0, 0,  0.8)"
+              class="bi bi-trash-fill"
+              viewBox="0 0 16 16"
+              style="
+                margin-left: 200px;
+                margin-top: 15px;
+                color: rgba(255, 0, 0, 0.798);
+              "
+            >
+              <path
+                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+              />
+            </svg>
+            <% } %>
+            <% if(getUserName.firstName != player.playerNames) { %>
+              <div class="block2" style="color: transparent;"><%= player.id %></div>
+              <p class="h3 m-2 playerNames"><%= player.playerNames %></p> 
+              <% } %>
+            </div>            
+             <%}); %>
+             <script>
+              const sessionPage2 = document.querySelectorAll("div.block");
+              sessionPage2.forEach((anchor) => {
+                anchor.addEventListener("click", function (event) {
+                  event.preventDefault();
+                  const text = document.querySelector("span.nameOfSport").innerText;
+                  const id = this.innerText;
+                  const sessionId = document.querySelector("span.idOfSession").innerText
+                  const url =
+                    "/Sports/" +
+                    encodeURIComponent(text) +
+                    "/sessionDetail/" + "delete/" +
+                    encodeURIComponent(id) + "/sessionid/n/" + encodeURIComponent(sessionId);
+                  this.setAttribute("onclick", `window.location.href='${url}'`);
+                  window.location.href = url;
+                });
+              });
+            </script>
         </div>
         <% }%>
+        
     </section>
   </body>
 </html>
