@@ -72,7 +72,7 @@
         font-size: 18px;
         padding: 0px;
         box-shadow: 1px 2px 10px 2px rgba(255, 0, 0, 0.556);
-        font-family: Pacifico;
+        font-family: sans-serif;
       }
       #loginBtn:hover {
         background-color: red;
@@ -118,7 +118,7 @@
         letter-spacing: 3px;
         font-weight: bold;
         font-size: 1.3vw;
-        font-family: pacifico;
+        font-family: sans-serif;
         padding: 10px;
         box-shadow: 1px 1px 2px 1px rgba(255, 255, 255, 0.718);
       }
@@ -131,7 +131,7 @@
         height: 5vh;
         border-radius: 32px;
         font-size: 1.3vw;
-        font-family: pacifico;
+        font-family: sans-serif;
         background-color: transparent;
         border: 3px solid rgba(255, 166, 0, 0.819);
         margin-left: 10px;
@@ -597,7 +597,7 @@
         width: 40%;
         border-radius: 32px;
         box-shadow: 1px 1px 14px 1px black;
-        font-family: pacifico;
+        font-family: sans-serif;
         font-weight: 400;
       }
       .sportsButtons button:hover{
@@ -679,7 +679,6 @@
           id="adminOptions"
           style="position: absolute; left: 90%"
         >
-          <li class="list-group-item">View Reports</li>
           <li class="list-group-item text-danger" onclick="window.location.href='/'">Sign out</li>
         </ul>
       <div
@@ -693,13 +692,13 @@
           justify-content: center;
         "
       >
-      <h1 class="m-5" style="font-family: pacifico; color: rgba(255, 166, 0, 0.819); font-size: 3.5vw;">Available <span style="color:rgba(255, 255, 255, 0.772)">Sports</span></h1>
+      <h1 class="m-5" style="font-family: sans-serif; color: rgba(255, 166, 0, 0.819); font-size: 3.5vw;">Available <span style="color:rgba(255, 255, 255, 0.772)">Sports</span></h1>
       <div class="grid">
         <% sportsItems.forEach(function(user) { %>
         <div class="card">
           
-          <h1 style="color: transparent; font-family: pacifico;" class="getSportId" ><%= user.id %></h1>
-            <h1 style="color: rgba(255, 255, 255, 0.819); font-family: pacifico;" class="getSportId" id="getNameOfSport" onclick="window.location.href='/SportDetail'"><%= user.Sports_Name %></h1>
+          <h1 style="color: transparent; font-family: sans-serif;" class="getSportId" ><%= user.id %></h1>
+            <h1 style="color: rgba(255, 255, 255, 0.819); font-family: sans-serif;" class="getSportId" id="getNameOfSport" onclick="window.location.href='/SportDetail'"><%= user.Sports_Name %></h1>
             <div class="row">
               
             </div>

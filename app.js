@@ -247,6 +247,25 @@ app.delete(
 
 //***************************************Sports Scheduler*********************************************************************************
 app.get(
+  "/viewReport",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const countOfSports = await Sports.count();
+    const getSports = await Sports.findAll();
+    const getSessions = await sessions.findAll();
+    console.log("====================================");
+    console.log(countOfSports);
+    console.log("====================================");
+    return response.render("viewReport", {
+      "csrfToken": request.csrfToken(), //prettier-ignore
+      countOfSports,
+      getSports,
+      getSessions,
+    });
+  }
+);
+
+app.get(
   "/join/n/:sportname/:sessionId",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
