@@ -11,7 +11,6 @@ var csurf = require("tiny-csrf");
 var cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const flash = require("connect-flash");
-const { log } = require("console");
 
 const saltRounds = 10;
 
@@ -405,6 +404,27 @@ app.post(
 );
 
 app.post(
+  "/updateSession/n",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const updateSession = await sessions.update(
+      {
+        session: request.body.session,
+        time: request.body.time,
+        Address: request.body.Address,
+        countOfPlayers: request.body.numberOfPlayers,
+      },
+      {
+        where: {
+          id: request.body.userId,
+        },
+      }
+    );
+    return response.redirect(`/userHomePage/n`);
+  }
+);
+
+app.post(
   "/updateSport",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
@@ -450,6 +470,29 @@ app.get(
     });
 
     return response.redirect(`/Sports/${nameofSport}`);
+  }
+);
+
+app.get(
+  "/Sports/:name/deleteSession/n/:id",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const deleteSessionId = request.params.id;
+    const nameofSport = request.params.name;
+
+    const deletePlayer = await sessions.destroy({
+      where: {
+        id: deleteSessionId,
+      },
+    });
+
+    await players.destroy({
+      where: {
+        playerAccessId: request.user.id,
+      },
+    });
+
+    return response.redirect(`/Sports/n/${nameofSport}`);
   }
 );
 
@@ -882,14 +925,21 @@ app.post(
   }),
   async (request, response) => {
     console.log(request.user);
-
+    const existingUser = await User.findOne({
+      where: {
+        email: request.body.email,
+      },
+    });
+    console.log("====================================");
+    console.log(existingUser.email);
+    console.log("====================================");
     if (
       request.body.email === "adminhari@gmail.com" &&
       request.body.password === "admin9843"
     ) {
       return response.redirect("/admin");
     }
-    response.redirect(`/userHomePage/n`);
+    return response.redirect(`/userHomePage/n`);
   }
 );
 

@@ -207,6 +207,29 @@
         height: 8vh;
         background-color: transparent;
       }
+      #formSignupContainer {
+        display: none;
+        position: absolute;
+        top: 15%;
+        left: 35%;
+        width: 30vw;
+        height: 70vh;
+        background-color: #fff;
+        border-radius: 32px;
+        box-shadow: 1px 1px 6px 1px rgb(255, 254, 254);
+      }
+
+      #formSignupContainer input {
+        color: black;
+      }
+      .loginInput {
+        width: 75%;
+        height: 7vh;
+        margin: 5px;
+        border: none;
+        background-color: whitesmoke;
+        border-radius: 32px;
+      }
     </style>
 
     <title>Admin</title>
@@ -343,7 +366,7 @@
         <h1 class="mx-5" style="color: white; font-family: sans-serif">
             <span class="nameOfSport"><%= sessionSportName%></span> <span style="color: rgb(175, 170, 170)">Session #</span><span class="idOfSession" style="color: rgb(175, 170, 170)"><%= sessionSportId%></span>
           </h1>
-        <a class="btn btn-primary editOptBtns my-2" href=''>Edit</a>
+          <a class="btn btn-primary editOptBtns my-2" onclick="document.getElementById('formSignupContainer').style.display = 'block'">Edit</a>
         <button class="btn btn-danger editOptBtns my-2 deleteSession" onclick="">Delete</button>
         <a class="btn btn-success editOptBtns joinedSession my-2" href="" >Join</a>    
         <script>
@@ -569,7 +592,122 @@
             </script>
         </div>
         <% }%>
-        
+        <div class="container formLogin shadow-lg" id="formSignupContainer">
+          <form action="/updateSession/n" method="post">
+            <h1
+              align="center"
+              class="my-3"
+              style="color: rgb(241, 157, 0); font-family: sans-serif"
+            >
+              Update Session
+            </h1>
+            <svg
+              onclick="closeFormSignup()"
+              style="
+                position: absolute;
+                top: 0%;
+                left: 100%;
+                color: white;
+                background-color: red;
+                border-radius: 32px;
+                border: none;
+              "
+              id="closeSvg"
+              xmlns="http://www.w3.org/2000/svg"
+              width="26"
+              height="26"
+              fill="currentColor"
+              class="bi bi-x-circle"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+              />
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+              />
+            </svg>
+            <script>
+              function closeFormSignup() {
+                document.getElementById("formSignupContainer").style.display =
+                  "none";
+              }
+            </script>
+            <hr />
+            <center>
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <input
+                type="date"
+                name="session"
+                placeholder="Enter the session date"
+                id=""
+                value="<%= getSessionDetail.session %>"
+                class="loginInput p-3"
+                required
+              />
+              <input
+                type="time"
+                name="time"
+                placeholder="time"
+                id=""
+                class="loginInput p-3"
+                value="<%= getSessionDetail.time %>"
+                required
+              />
+              <input
+                type="text"
+                name="Address"
+                placeholder="where the session will be held"
+                id=""
+                class="loginInput p-3"
+                value="<%= getSessionDetail.Address %>"
+                required
+              />
+              <input
+                type="hidden"
+                class="loginInput p-3"
+                placeholder="who all are participating"
+                name="userId"
+                id=""
+                value="<%= getSessionDetail.id%>"
+                required
+              />
+              <br />
+              <input
+                type="number"
+                placeholder="how many players do you need"
+                class="loginInput p-3"
+                name="numberOfPlayers"
+                id=""
+                min="<%= getSessionDetail.countOfPlayers%>"
+                 value= "<%= getSessionDetail.countOfPlayers%>"
+                required
+              /><br />
+              <input
+                type="checkbox"
+                name=""
+                id=""
+                class="my-3 mx-3"
+                required
+              /><label class="my-3 text-dark"
+                >I agree to update this session</label
+              ><br />
+              <button
+                type="submit"
+                class="btn w-50"
+                style="
+                  background-color: orange;
+                  color: white;
+                  font-weight: 600;
+                  font-size: 1.7vw;
+                "
+              >
+                Update
+              </button>
+              <br /><br />
+            </center>
+          </form>
+        </div>
     </section>
   </body>
 </html>
