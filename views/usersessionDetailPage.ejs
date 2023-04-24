@@ -368,7 +368,20 @@
           </h1>
           <a class="btn btn-primary editOptBtns my-2" onclick="document.getElementById('formSignupContainer').style.display = 'block'">Edit</a>
         <button class="btn btn-danger editOptBtns my-2 deleteSession" onclick="">Delete</button>
-        <a class="btn btn-success editOptBtns joinedSession my-2" href="" >Join</a>    
+        <a class="btn btn-success editOptBtns joinedSession my-2" href="" >Join</a> 
+        <script>
+          const joinSession3 = document.querySelectorAll("a.joinedSession");
+          joinSession3.forEach((anchor) => {
+            anchor.addEventListener("click", function (event) {
+              event.preventDefault();
+              const text = document.querySelector("span.nameOfSport").innerText;
+              const sessionId = document.querySelector("span.idOfSession").innerText
+              const url = "/join/n/" + encodeURIComponent(text) + "/" + encodeURIComponent(sessionId);
+              this.setAttribute("href", url);
+              window.location.href = url; 
+      });
+    });
+        </script>   
         <script>
           const deleteFullSession= document.querySelectorAll("button.deleteSession");
           deleteFullSession.forEach((anchor) => {
