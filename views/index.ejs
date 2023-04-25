@@ -684,6 +684,11 @@
     </div>
     <div class="container formLogin shadow-lg" id="formSignupContainer">
       <form action="/users" method="post">
+        <% if(messages && messages.error && messages.error.length > 0)  { %>
+          <% for(var i=0; i<messages.error.length; i++) { %>
+                  <p class="alert alert-danger"> <%= messages.error[i] %></p>
+          <% } %>
+        <% } %>
         <h1
           align="center"
           class="my-3"
@@ -732,6 +737,7 @@
             placeholder="First name"
             id=""
             class="loginInput p-3"
+            required
           />
           <input
             type="text"
@@ -739,6 +745,7 @@
             placeholder="Last name"
             id=""
             class="loginInput p-3"
+            required
           />
           <input
             type="text"
@@ -746,6 +753,7 @@
             placeholder="Enter your email"
             name="email"
             id=""
+            required
           /><br />
           <input
             type="password"
@@ -753,6 +761,7 @@
             class="loginInput p-3"
             name="password"
             id=""
+            required
           /><br /><br />
           <button
             type="submit"

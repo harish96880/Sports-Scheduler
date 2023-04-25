@@ -131,22 +131,33 @@ app.get("/signout", (request, response) => {
 app.post("/users", async (request, response) => {
   const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
   console.log(hashedPwd);
-  try {
-    const user = await User.create({
-      firstName: request.body.firstName,
-      lastName: request.body.lastName,
+  const existingUser = await User.findOne({
+    where: {
       email: request.body.email,
-      password: hashedPwd,
-    });
-    request.login(user, (err) => {
-      if (err) {
-        console.log(error);
-      }
-      response.redirect("/userHomePage/n");
-    });
-  } catch (error) {
-    console.log(error);
+    },
+  });
+  console.log("====================================");
+  console.log(existingUser.email);
+  console.log("====================================");
+  if (!existingUser) {
+    try {
+      const user = await User.create({
+        firstName: request.body.firstName,
+        lastName: request.body.lastName,
+        email: request.body.email,
+        password: hashedPwd,
+      });
+      request.login(user, (err) => {
+        if (err) {
+          console.log(error);
+        }
+        response.redirect("/userHomePage/n");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
+  return response.send("This email address is already registered with us");
 });
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -925,14 +936,6 @@ app.post(
   }),
   async (request, response) => {
     console.log(request.user);
-    const existingUser = await User.findOne({
-      where: {
-        email: request.body.email,
-      },
-    });
-    console.log("====================================");
-    console.log(existingUser.email);
-    console.log("====================================");
     if (
       request.body.email === "adminhari@gmail.com" &&
       request.body.password === "admin9843"
