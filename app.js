@@ -136,28 +136,24 @@ app.post("/users", async (request, response) => {
       email: request.body.email,
     },
   });
-  console.log("====================================");
-  console.log(existingUser.email);
-  console.log("====================================");
-  if (!existingUser) {
-    try {
-      const user = await User.create({
-        firstName: request.body.firstName,
-        lastName: request.body.lastName,
-        email: request.body.email,
-        password: hashedPwd,
-      });
-      request.login(user, (err) => {
-        if (err) {
-          console.log(error);
-        }
-        response.redirect("/userHomePage/n");
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  try {
+    const user = await User.create({
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      email: request.body.email,
+      password: hashedPwd,
+    });
+    request.login(user, (err) => {
+      if (err) {
+        console.log(error);
+      }
+      return response.redirect("/userHomePage/n");
+    });
+  } catch (error) {
+    console.log(error);
   }
-  return response.send("This email address is already registered with us");
+
+  // return response.send("This email address is already registered with us");
 });
 
 app.use(express.static(path.join(__dirname, "public")));
