@@ -88,30 +88,6 @@ app.get("/", async (request, response) => {
   });
 });
 
-app.get(
-  "/todos",
-  connectEnsureLogin.ensureLoggedIn(),
-  async (request, response) => {
-    const loggedInUser = request.user.id;
-    const overdueTodoItems = await Todo.overdueTodo(loggedInUser);
-    const duetodayTodoItems = await Todo.duetodayTodo(loggedInUser);
-    const duelaterTodoItems = await Todo.duelaterTodo(loggedInUser);
-    const completedTodoItems = await Todo.markAsCompletedItems(loggedInUser);
-    if (request.accepts("html")) {
-      response.render("todo", {
-        title: "Harish Todo-Manager",
-        overdueTodoItems,
-        duelaterTodoItems,
-        duetodayTodoItems,
-        completedTodoItems,
-        csrfToken: request.csrfToken(),
-      });
-    } else {
-      response.json({ overdueTodoItems, duetodayTodoItems, duelaterTodoItems });
-    }
-  }
-);
-
 app.get("/login", (request, response) => {
   response.render("index", {
     title: "Login",
@@ -163,98 +139,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.static(path.join(__dirname, "images")));
 
-app.get("/todos", async function (_request, response) {
-  console.log("Processing list of all Todos ...");
-
-  try {
-    const todo = await Todo.getTodo();
-    return response.json(todo);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
-
-app.get("/todos/:id", async function (request, response) {
-  try {
-    const todo = await Todo.findByPk(request.params.id);
-    return response.json(todo);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
-
-app.post(
-  "/todos",
-  connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
-    console.log(request.user);
-    try {
-      const todo = await Todo.addTodo({
-        title: request.body.title,
-        dueDate: request.body.dueDate,
-        userId: request.user.id,
-      });
-      return response.redirect("/todos");
-    } catch (error) {
-      console.log(error);
-      return response.status(422).json(error);
-    }
-  }
-);
-
-app.put(
-  "/todos/:id/markAsCompleted",
-  connectEnsureLogin.ensureLoggedIn(),
-  async (request, response) => {
-    console.log("we have to update a todo with ID:", request.params.id);
-    const todo = await Todo.findByPk(request.params.id);
-    try {
-      const updatedtodo = await todo.setCompletionStatus(
-        request.body.completed
-      );
-      return response.json(updatedtodo);
-    } catch (error) {
-      console.log(error);
-      return response.status(422).json(error);
-    }
-  }
-);
-
-app.put(
-  "/todos/:id",
-  connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
-    const todo = await Todo.findByPk(request.params.id);
-    try {
-      const updatedTodo = await todo.setCompletionStatus(
-        request.body.completed
-      );
-      return response.json(updatedTodo);
-    } catch (error) {
-      console.log(error);
-      return response.status(422).json(error);
-    }
-  }
-);
-
-app.delete(
-  "/todos/:id",
-  connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
-    console.log("We have to delete a Todo with ID: ", request.params.id);
-
-    try {
-      await Todo.remove(request.params.id, request.user.id);
-      return response.json(true);
-    } catch (error) {
-      return response.status(422).json(error);
-    }
-  }
-);
-
-//***************************************Sports Scheduler*********************************************************************************
 app.get(
   "/viewReport",
   connectEnsureLogin.ensureLoggedIn(),
