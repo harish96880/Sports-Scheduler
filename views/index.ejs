@@ -447,6 +447,11 @@
         </div>
       </nav>
       <hr class="m-0" style="border: 2px solid rgb(59, 57, 57)" />
+      <% if(messages && messages.error && messages.error.length > 0)  { %>
+        <% for(var i=0; i<messages.error.length; i++) { %>
+                <p class="alert alert-danger"> <%= messages.error[i] %></p>
+        <% } %>
+      <% } %>
       <div
         class="div"
         style="
@@ -684,11 +689,6 @@
     </div>
     <div class="container formLogin shadow-lg" id="formSignupContainer">
       <form action="/users" method="post">
-        <% if(messages && messages.error && messages.error.length > 0)  { %>
-          <% for(var i=0; i<messages.error.length; i++) { %>
-                  <p class="alert alert-danger"> <%= messages.error[i] %></p>
-          <% } %>
-        <% } %>
         <h1
           align="center"
           class="my-3"

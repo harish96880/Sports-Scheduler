@@ -136,6 +136,9 @@ app.post("/users", async (request, response) => {
       email: request.body.email,
     },
   });
+  console.log("====================================");
+  console.log(existingUser);
+  console.log("====================================");
   try {
     const user = await User.create({
       firstName: request.body.firstName,
@@ -150,7 +153,7 @@ app.post("/users", async (request, response) => {
       return response.redirect("/userHomePage/n");
     });
   } catch (error) {
-    console.log(error);
+    return response.send("Already exist");
   }
 
   // return response.send("This email address is already registered with us");
