@@ -399,7 +399,7 @@
         <% } else { %>
           <a class="btn btn-primary editOptBtns my-2" onclick="document.getElementById('formSignupContainer').style.display = 'block'">Edit</a>
           <button class="btn btn-danger editOptBtns my-2 deleteSession" onclick="">Delete</button>
-            <a class="btn btn-success editOptBtns joinedSession my-2" href=""  >Join</a>
+            <a class="btn btn-success editOptBtns joinedSession my-2" id="joinbtn11" href=""  >Join</a>
           <script>
             const deleteFullSession= document.querySelectorAll("button.deleteSession");
             deleteFullSession.forEach((anchor) => {
@@ -476,6 +476,7 @@
         <script>
           if(document.getElementById("num").innerText == document.getElementById("limit").innerText) {
             document.getElementById("addPlayerForm").style.display = "none"
+            document.getElementById("joinbtn11").style.display = "none"
           }
           else{
             document.getElementById("addPlayerForm").style.display = "block"
